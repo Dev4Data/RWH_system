@@ -16,14 +16,14 @@ weather_file = config['files']['weatherFile']
 keys = ['&key=' + config['visualcrossing_private']['key1']  # my key
         , '&key=' + config['visualcrossing_private']['key2']  # another key
         ]
-remain_rows = int(config['visualcrossing']['remain_rows'])
+remain_rows = int(config['visualcrossing']['max_rows_per_day'])
 
 
 def get_latlon_weather_json(
-        latlon_in,
-        date_min_in,
-        date_max_in,
-        use_key_num=0
+    latlon_in,
+    date_min_in,
+    date_max_in,
+    use_key_num=0
 ):
     """get historical weather data for a lat+lon position between start and end-date"""
     API_key = keys[use_key_num]
@@ -53,8 +53,8 @@ def get_latlon_weather_json(
 
 
 def get_new_weather_data(
-        num_rows=100,
-        use_key_num=0
+    num_rows=100,
+    use_key_num=0
 ):
     """load and save weather data, calc also the from and to range dates
         load just data where weather data is not collected yet
@@ -85,7 +85,7 @@ def get_new_weather_data(
         df_date_max_tmp = df_tmp["date_min"][loc] - datetime.timedelta(1)
         df_date_max = df_date_max_tmp.strftime("%Y-%m-%d")
         df_date_min_tmp = df_tmp["date_min"][loc]\
-            - datetime.timedelta(int(config['visualcrossing']['rows']))
+            - datetime.timedelta(int(config['visualcrossing']['rows_per_run']))
         df_date_min = df_date_min_tmp.strftime("%Y-%m-%d")
         # latitude+longitude of location
         latlng = [config['location']['latitude'], config['location']['longitude']]

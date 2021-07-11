@@ -135,18 +135,40 @@ chart_ym_heatmap(df_rsm, ["rain_season", "month", "precip_sum"]
     , "precip_sum_ym", "amount of rain in mm/m² ", "month", "rain season", "YlGnBu")
 chart_ym_heatmap(df_rsm, ["rain_season", "month", "precip_h_sum"]
     , "precip_h_sum_ym", "hours of rain ", "month", "rain season", "YlGnBu")
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "precip_h_avg"]
+    , "precip_h_avg_ym", "average hours of rain per day", "month", "rain season", "YlGnBu")
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "precip_h_med"]
+    , "precip_h_med_ym", "median hours of rain per day", "month", "rain season", "YlGnBu")
+
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "dry_day_sum"]
+    , "dry_day_sum_ym", "# of days without rain ", "month", "rain season", "coolwarm")
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "wet_day_sum"]
+    , "wet_day_sum_ym", "# of days with rain ", "month", "rain season", "YlGnBu")
+
 chart_ym_heatmap(df_rsm, ["rain_season", "month", "precip_mm_h_avg"]
     , "precip_mm_h_avg_ym", "average rainfall in mm/h ", "month", "rain season", "coolwarm")
 cmap = LinearSegmentedColormap.from_list('ryg', ["white", "lightblue", "blue", "lavender", "orange", "orangered"\
     , "red", "maroon", "plum", "violet", "purple"], N=1024)
 chart_ym_heatmap(df_rsm, ["rain_season", "month", "precip_mm_h_max"]
     , "precip_mm_h_max_ym", "maximum rainfall in mm/h ", "month", "rain season", cmap)
+
 cmap = LinearSegmentedColormap.from_list('ryg', ["darkred", "yellow", "lightyellow"
     , "yellowgreen", "lightgreen", "palegreen", "green", "darkgreen", "fuchsia", "violet", "purple"], N=1024)
 chart_ym_heatmap(df_rsm, ["rain_season", "month", "collected_sum"]
     , "collected_sum_ym", "amount of rain collected in l ", "month", "rain season", cmap)
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "net_collected_sum"]
+    , "net_collected_sum_ym", "(net)amount of rain collected in l ", "month", "rain season", cmap)
 chart_ym_heatmap(df_rsm, ["rain_season", "month", "overrun_sum"]
-    , "overrun_sum_ym", "amount of rain that couldnt be stored in l ", "month", "rain season", "YlGnBu")
+    , "overrun_sum_ym", "total amount of rain that couldnt be stored in l ", "month", "rain season", "YlGnBu")
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "net_overrun_sum"]
+    , "net_overrun_sum_ym", "(net)amount of rain that didnt reach the tank in l ", "month", "rain season", "YlGnBu")
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "tank_overrun_sum"]
+    , "tank_overrun_sum_ym", "(net)amount of rain that couldnt be stored in l ", "month", "rain season", "YlGnBu")
+
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "person_sum"]
+    , "person_sum_ym", " water used by persons in l ", "month", "rain season", "RdYlGn")
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "garden_sum"]
+    , "garden_sum_ym", " water used for the garden in l ", "month", "rain season", "RdYlGn")
 
 chart_ym_heatmap(df_rsm, ["rain_season", "month", "stored_min"]
     , "stored_min_ym", "minimum fill state of the water storage in l ", "month", "rain season", "RdYlGn")
