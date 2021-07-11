@@ -1,20 +1,14 @@
 import pandas as pd
 import numpy as np
 import os
-import datetime
 
 import setup_environment as env
 
 
-# constants
-config = env.get_config()
-weather_file = config['files']['weatherFile']
-date_from = config['weather']['date_from']
-date_till = config['weather']['date_till']
-
-
 """Show parameters"""
 env.set_pd_environments()
+# constants
+config = env.get_config()
 
 
 def load_csv(show_data_overview=False):
@@ -27,8 +21,8 @@ def load_csv(show_data_overview=False):
     df_tmp = df_tmp.sort_values('date')
 
     # limit the time frame
-    df_tmp = df_tmp[df_tmp['datetimeStr'] >= date_from]
-    df_tmp = df_tmp[df_tmp['datetimeStr'] < date_till]
+    df_tmp = df_tmp[df_tmp['datetimeStr'] >= config['weather']['date_from']]
+    df_tmp = df_tmp[df_tmp['datetimeStr'] < config['weather']['date_till']]
 
     # add some data
     df_tmp['year'] = df_tmp['date'].dt.year
@@ -42,6 +36,8 @@ def load_csv(show_data_overview=False):
     df_tmp['precip_h'] = df_tmp['precipcover'] / 100 * 24
     df_tmp['precip_mm_h'] = df_tmp['precip'] / df_tmp['precip_h']
     df_tmp['precip_mm_h'] = df_tmp['precip_mm_h'].fillna(0)
+    df_tmp['dry_day'] = df_tmp['precip'].apply(lambda x: 1 if x == 0 else 0).fillna(0)
+    df_tmp['wet_day'] = df_tmp['precip'].apply(lambda x: 1 if x > 0 else 0).fillna(0)
 
     df_tmp['wdir'] = df_tmp['wdir'].fillna(0).round(0).astype(int)
 
@@ -171,7 +167,8 @@ def calc_rwh_stormwater_test\
                   , max_filter_throughput
                   , max_pipe_throughput
                   , effective_collection_area
-                  , rain_buffer_volume):
+                  , rain_buffer_volume
+                  , show_data_overview=False):
     """Test the choosen RWH components for heavy rain management
         and return a dataset with all days the system propably couldnt manage the volume of rain
         The max_pipe_throughput is from the gutter to the storm water tank
@@ -223,6 +220,11 @@ def calc_rwh_stormwater_test\
 
     storm_yn = np.logical_or(pipe_rush_yn, filter_rush_yn)  # filter overrun
 
+    if show_data_overview:
+        print(df_tmp.info())
+        print(df_tmp.head(60))
+        print(df_tmp.tail(60))
+        # print(df_tmp.describe())
     return df_tmp, storm_yn
 
 
@@ -242,6 +244,8 @@ def group_rwh_data_ym(df, group_fields, show_data_overview=False):
              , precip_q3=("precip", lambda x: np.percentile(x, q=75))
              , precip_max=("precip", "max")
              , precip_std=("precip", np.std)
+             , dry_day=("dry_day", "sum")
+             , wet_day=("wet_day", "sum")
              , collected_sum=("collected", "sum")
              , precip_h_sum=("precip_h", "sum")
              , precip_mm_h_min=("precip_mm_h", "min")
@@ -322,7 +326,7 @@ def main():
                          , eval(config['dwh']['effective_roof_size'])
                          , eval(config['dwh']['storage_volume'])
                          , eval(config['dwh']['tank_reserves'])
-                         , True  # show_data_overview
+                         , False  # show_data_overview
                          )
 
     df, df_storm_gr\
@@ -332,14 +336,16 @@ def main():
             , 870 # l/minute max_pipe_throughput
             , 93 * 0.8 # effective_collection_area
             , 3000 # rain_buffer_volume
+            , False
             )
     df, df_storm_mr\
         = calc_rwh_stormwater_test\
             (df, "mr_"
-            , 87 # l/minute max_filter_throughput
+            , 999 # l/minute max_filter_throughput
             , 870 # l/minute max_pipe_throughput
             , 189 * 0.5  # effective_collection_area
             , 3000 # rain_buffer_volume
+            , True
             )
     has_overrrun_yn = np.logical_or(df_storm_gr, df_storm_mr)
     print(df[has_overrrun_yn].head())

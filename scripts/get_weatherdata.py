@@ -4,6 +4,7 @@ import datetime
 import requests
 from random import randint
 import csv
+import json
 import os
 
 import setup_environment as env
@@ -58,7 +59,18 @@ def get_new_weather_data(
     """load and save weather data, calc also the from and to range dates
         load just data where weather data is not collected yet
     """
-    df = pd.read_csv(weather_file)
+    try:
+        df = pd.read_csv(weather_file)
+    except FileNotFoundError:
+        print("File not found. "+weather_file)
+        return
+    except pd.errors.EmptyDataError:
+        print("No data in "+weather_file)
+        return
+    except pd.errors.ParserError:
+        print("Parse error for file "+weather_file)
+        return
+
     df['date'] = df['date'].astype({'date': 'datetime64[ns]'})
     df.reset_index(inplace=True)
     df_tmp = df.groupby(['location'], as_index=False, sort=False) \
@@ -88,6 +100,11 @@ def get_new_weather_data(
             msg = json_data["message"]
         else:
             msg = "nan"
+        info = json_data['location']['values'][0]['info']
+        if info == "No data available":
+            print("msg: {}".format(info))
+            return json_data['remainingCost'], 0
+
         if msg == None\
         or msg == "nan":
             if "remainingCost" in json_data:
@@ -117,7 +134,7 @@ def get_new_weather_data(
                     filled_lines = df_json.shape[0]
         else:
             print("msg: {}".format(msg))
-            break
+            return json_data['remainingCost'], 0
     return remaining_cost, filled_lines
 
 
@@ -133,7 +150,8 @@ def get_weather_data_run():
             remain_rows_tmp, filled = get_new_weather_data(num_rows=get_rows, use_key_num=key)
             sum_filled += filled
             if filled == 0:
-                print("new # of weatherdata with key={}: {}".format(key, sum_filled))
+                print("{} new # of weatherdata with key={} remain_rows={} "\
+                      .format(sum_filled, key, remain_rows_tmp))
                 break
 
 
