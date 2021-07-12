@@ -54,7 +54,8 @@ def get_latlon_weather_json(
 
 def get_new_weather_data(
     num_rows=100,
-    use_key_num=0
+    use_key_num=0,
+    collect_data_before_now="y"
 ):
     """load and save weather data, calc also the from and to range dates
         load just data where weather data is not collected yet
@@ -82,11 +83,21 @@ def get_new_weather_data(
     for loc in df_tmp.index:
         # get smallest and highest date for location (max x rows)
         location = df_tmp["location_"][loc]
-        df_date_max_tmp = df_tmp["date_min"][loc] - datetime.timedelta(1)
-        df_date_max = df_date_max_tmp.strftime("%Y-%m-%d")
-        df_date_min_tmp = df_tmp["date_min"][loc]\
-            - datetime.timedelta(int(config['visualcrossing']['rows_per_run']))
-        df_date_min = df_date_min_tmp.strftime("%Y-%m-%d")
+        if collect_data_before_now == "y":
+            df_date_max_tmp = df_tmp["date_min"][loc] - datetime.timedelta(1)
+            df_date_max = df_date_max_tmp.strftime("%Y-%m-%d")
+            df_date_min_tmp = df_tmp["date_min"][loc]\
+                - datetime.timedelta(int(config['visualcrossing']['rows_per_run']))
+            df_date_min = df_date_min_tmp.strftime("%Y-%m-%d")
+        else:
+            df_date_min_tmp = df_tmp["date_max"][loc] + datetime.timedelta(1)
+            df_date_min = df_date_min_tmp.strftime("%Y-%m-%d")
+            df_date_max_tmp = \
+                np.minimum((datetime.datetime.today() - datetime.timedelta(1))
+                             , df_tmp["date_max"][loc]
+                                + datetime.timedelta(int(config['visualcrossing']['rows_per_run'])))
+            df_date_max = df_date_max_tmp.strftime("%Y-%m-%d")
+
         # latitude+longitude of location
         latlng = [config['location']['latitude'], config['location']['longitude']]
         # get the weather data as csv
@@ -147,7 +158,10 @@ def get_weather_data_run():
         # loop x times each time with 50-100 rows to full fill the limits of API calls
         for i in range(int(config['visualcrossing']['loops'])):
             get_rows = np.minimum(randint(50, 90), remain_rows_tmp)
-            remain_rows_tmp, filled = get_new_weather_data(num_rows=get_rows, use_key_num=key)
+            remain_rows_tmp, filled \
+                = get_new_weather_data(num_rows=get_rows
+                                       , use_key_num=key
+                                       , collect_data_before_now="n")
             sum_filled += filled
             if filled == 0:
                 print("{} new # of weatherdata with key={} remain_rows={} "\
