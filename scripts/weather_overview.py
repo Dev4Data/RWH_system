@@ -96,8 +96,8 @@ def init_rwh_data(rwh_data):
 def calc_rwh_collection\
     ( df_tmp
       , roof_name
-      , max_filter_throughput
       , max_pipe_throughput
+      , max_filter_throughput
       , effective_collection_area
       , rain_buffer_volume
       , show_data_overview=False):
@@ -249,6 +249,8 @@ def calc_rwh_system \
                     )
               )
               )
+    rwh_data['tank_empty'] = rwh_data['store_filled_pct'].apply(lambda x: 1 if x == 0.0 else 0).fillna(0)
+    rwh_data['tank_low'] = rwh_data['store_filled_pct'].apply(lambda x: 1 if x <= 0.1 else 0).fillna(0)
 
     if show_data_overview:
         print(rwh_data.info())
@@ -293,6 +295,8 @@ def group_rwh_data_ym(df, group_fields, show_data_overview=False):
              , stored_max=("stored", "max")
              , stored_grp_min=("store_filled_grp", "min")
              , stored_grp_max=("store_filled_grp", "max")
+             , tank_empty_sum=("tank_empty", "sum")
+             , tank_low_sum=("tank_low", "sum")
              , overrun_sum=("overrun", "sum")
              , net_overrun_sum=("net_overrun", "sum")
              , tank_overrun_sum=("tank_overrun", "sum")
@@ -365,20 +369,20 @@ def main():
     # default RWH parameters
     df, df_storm_gr\
         = calc_rwh_collection\
-            (df, "gr_"
-            , 35 # l/minute max_filter_throughput
-            , 870 # l/minute max_pipe_throughput
-            , 93 * 0.85 # effective_collection_area
-            , 3000 # rain_buffer_volume
+            (df, config['dwh']['r1_name']
+            , eval(config['dwh']['r1_max_pipe_throughput'])
+            , eval(config['dwh']['r1_max_filter_throughput'])
+            , eval(config['dwh']['r1_effective_collection_area'])
+            , eval(config['dwh']['r1_rain_buffer_volume'])
             , False
             )
     df, df_storm_mr\
         = calc_rwh_collection\
-            (df, "mr_"
-            , 999 # l/minute max_filter_throughput
-            , 870 # l/minute max_pipe_throughput
-            , 189 * 0.5  # effective_collection_area
-            , 3000 # rain_buffer_volume
+            (df, config['dwh']['r2_name']
+            , eval(config['dwh']['r2_max_pipe_throughput'])
+            , eval(config['dwh']['r2_max_filter_throughput'])
+            , eval(config['dwh']['r2_effective_collection_area'])
+            , eval(config['dwh']['r2_rain_buffer_volume'])
             , False
             )
     df, df_tank\

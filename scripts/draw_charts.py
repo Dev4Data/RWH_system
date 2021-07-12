@@ -5,10 +5,15 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
 import weather_overview as data
+import setup_environment as env
 
 
+"""Show parameters"""
+env.set_pd_environments()
+# constants
+config = env.get_config()
 """Parameters"""
-cat_month = pd.CategoricalDtype([7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6], ordered=True)
+cat_month = pd.CategoricalDtype(eval(config['dwh']['month_order']), ordered=True)
 
 def chart_wspd_wdir(df_tmp, filename):
     """wind speed vs wind direction chart"""
@@ -174,6 +179,10 @@ chart_ym_heatmap(df_rsm, ["rain_season", "month", "stored_min"]
     , "stored_min_ym", "minimum fill state of the water storage in l ", "month", "rain season", "RdYlGn")
 chart_ym_heatmap(df_rsm, ["rain_season", "month", "stored_max"]
     , "stored_max_ym", "maximum fill state of the water storage in l ", "month", "rain season", "RdYlGn")
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "tank_empty_sum"]
+    , "tank_empty_sum_ym", "# of days the water storage is empty ", "month", "rain season", "coolwarm")
+chart_ym_heatmap(df_rsm, ["rain_season", "month", "tank_low_sum"]
+    , "tank_low_sum_ym", "# of days the water storage is below 10% ", "month", "rain season", "coolwarm")
 
 df_ym.reset_index(drop=False, inplace=True)
 chart_ym_heatmap(df_ym, ["year", "month", "temp_min"]
