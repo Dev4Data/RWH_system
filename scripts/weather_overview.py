@@ -392,7 +392,7 @@ def main():
                          , eval(config['dwh']['garden_usage'])
                          , eval(config['dwh']['storage_volume'])
                          , eval(config['dwh']['tank_reserves'])
-                         , False  # show_data_overview
+                         , True  # show_data_overview
                          )
     print(df[np.logical_or(np.logical_or(df_storm_gr, df_storm_mr), df_tank)].head(30))
     del df_storm_gr
