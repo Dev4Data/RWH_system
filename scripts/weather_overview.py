@@ -46,6 +46,18 @@ def load_csv(show_data_overview=False):
          + df_tmp['precip'].shift(7)
     df_tmp['dry_day'] = df_tmp['precip'].apply(lambda x: 1 if x == 0 else 0).fillna(0)
     df_tmp['wet_day'] = df_tmp['precip'].apply(lambda x: 1 if x > 0 else 0).fillna(0)
+    df_tmp['precip_grp'] = df_tmp['precip']. \
+        apply(lambda x: '00' if x == 0.0 \
+            else ('00-02' if 0.0 < x <= 2.0
+                  else ('03-05' if 0.2 < x <= 5.0
+                        else ('06-10' if 5.0 < x <= 10.0
+                              else ('11-20' if 10.0 < x <= 20.00
+                                    else '21+'
+                                    )
+                              )
+                        )
+                  )
+              )
 
     df_tmp['wdir'] = df_tmp['wdir'].fillna(0).round(0).astype(int)
 
@@ -239,16 +251,14 @@ def calc_rwh_system \
     rwh_data['store_filled_pct'] = rwh_data['stored'] / storage_volume
     rwh_data['store_filled_grp'] = rwh_data['store_filled_pct']. \
         apply(lambda x: '00' if x == 0.0 \
-        else ('00' if x == 0.0
-              else ('01-10' if 0.0 < x <= 0.1
+            else ('01-10' if 0.0 < x <= 0.1
                     else ('11-33' if 0.1 < x <= 0.33
                           else ('34-66' if 0.33 < x <= 0.66
                                 else '67+'
                                 )
                           )
                     )
-              )
-              )
+               )
     rwh_data['tank_empty'] = rwh_data['store_filled_pct'].apply(lambda x: 1 if x == 0.0 else 0).fillna(0)
     rwh_data['tank_low'] = rwh_data['store_filled_pct'].apply(lambda x: 1 if x <= 0.1 else 0).fillna(0)
 
