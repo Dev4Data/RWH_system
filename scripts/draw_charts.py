@@ -34,7 +34,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
-import weather_overview as data
+import calc_rwh_system as rwh_system
 import setup_environment as env
 
 
@@ -243,7 +243,7 @@ def chart_df_totals(df_tmp_grp):
 
 
 """get the data"""
-df, df_total, df_ym = data.main()
+df, df_total, df_ym = rwh_system.main()
 
 
 """plot data"""
@@ -270,7 +270,7 @@ chart_precip_sum_ym(df_ym)
 chart_precip_sum_yw(df)
 # chart_precip_sum_to_h(df, df_ym)
 
-df_rsm, df_rsm_total = data.group_rwh_data_ym(df, ['rain_season', 'month'], False)
+df_rsm, df_rsm_total = rwh_system.group_rwh_data_ym(df, ['rain_season', 'month'], False)
 
 df_rsm.reset_index(drop=False, inplace=True)
 df_rsm['month'] = df_rsm['month'].astype(cat_month)

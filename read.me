@@ -1,0 +1,37 @@
+Weather data collection and Rain Water Harvesting (RWH) design python scripts
+
+Abstract:
+    This scripts are my solution to find the best RWH system design for my own project.
+    It collects the weather data from the visual-crossing API on a daily basis.
+    And then uses the data and according to the given parameters from the /settings/settings.ini
+    to calculate the RWH system performance.
+    To visualize the performance some diagrams are saved in the /diagrams folder.
+
+Content:
+    Folders:
+        _docs - descriptions
+        data - location of the weather data
+        diagrams - folder all the diagrams are saved in
+        scripts - python script to start the process
+        settings - ini files with
+    Scripts:
+        get_weather_data - script to collect and save the weather data in a csv file
+        calc_rwh_system - here the system parameters are used to calc the performance of the system
+        draw_chart - save png files of diagrams that are important to evaluate the RWH system performance
+        setup_environment - just collects the configuration parameters and defines display parameters
+    Parameter-files:
+        key.ini with the visual-crossing API keys (private)
+        settings.ini with all other parameters
+
+How to:
+    01. create the /settings/key.ini file first and fill it like this
+        [visualcrossing_private]
+        key1 = ...
+        key2 = ...
+        >>Hint: you can add or remove keys
+            but then you have to change the keys array in the get_weatherdata script also
+    02. set your latitude,longitude position in [location] section of the settings.ini
+    03. run the get_weatherdata.py script and sight the csv file
+    04. fill the desired RWH system parameters in the [rwh] section of the settings.ini
+    05. run the draw_charts.py script (calls the calc_rwh_system at the beginning)
+    06. check the diagrams
