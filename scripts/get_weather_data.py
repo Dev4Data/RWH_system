@@ -20,7 +20,7 @@ import csv
 import json
 import os
 
-import setup_environment as env
+from yenikas_weather.scripts import setup_environment as env
 
 
 # constants
@@ -29,7 +29,8 @@ import setup_environment as env
     when you a dont use the same number of keys as shown 
 """
 config = env.get_config()
-weather_file = config['files']['weatherFile']
+PROJECT_ROOT = env.get_project_root()
+weather_file = "{}/{}".format(PROJECT_ROOT, config['files']['weatherFile'])
 remain_rows = int(config['visualcrossing']['max_rows_per_day'])
 
 keys = []

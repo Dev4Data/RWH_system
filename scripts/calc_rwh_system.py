@@ -22,8 +22,9 @@ return:
 import pandas as pd
 import numpy as np
 import os
+from pathlib import Path
 
-import setup_environment as env
+from yenikas_weather.scripts import setup_environment as env
 
 
 """Show parameters"""
@@ -44,7 +45,9 @@ def load_csv(show_data_overview=False):
         return:
             DataFrame with the data
     """
-    df_tmp = pd.read_csv(config['files']['weatherFile'])
+    PROJECT_ROOT = env.get_project_root()
+    file_path = "{}/{}".format(PROJECT_ROOT, config['files']['weatherFile'])
+    df_tmp = pd.read_csv(file_path)
 
     """wrangle and clean data"""
     df_tmp['date'] = df_tmp['date'].astype({'date': 'datetime64[ns]'})

@@ -34,8 +34,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
-import calc_rwh_system as rwh_system
-import setup_environment as env
+from yenikas_weather.scripts import calc_rwh_system as rwh_system
+from yenikas_weather.scripts import setup_environment as env
 
 
 """Show parameters"""
@@ -45,6 +45,9 @@ config = env.get_config()
 """Parameters"""
 cat_month = pd.CategoricalDtype(eval(config['rwh']['month_order']), ordered=True)
 
+PROJECT_ROOT = env.get_project_root()
+file_path = "{}/{}".format(PROJECT_ROOT, config['files']['weatherFile'])
+diagram_path = "{}/diagrams/".format(PROJECT_ROOT)
 
 def chart_wspd_wdir(df_tmp, filename):
     """wind speed vs wind direction chart total"""
@@ -60,7 +63,7 @@ def chart_wspd_wdir(df_tmp, filename):
     # ax1.set_title("Continent correlation")
     plt.xlabel('wind direction °')
     plt.ylabel('wind speed kph')
-    fig1.savefig("./diagrams/heatmap_" + filename + ".png")
+    fig1.savefig(diagram_path+"heatmap_" + filename + ".png")
     plt.close()
 
 
@@ -79,7 +82,7 @@ def chart_wspd_wdir_monthly(df_tmp, filename):
         # ax1.set_title("Continent correlation")
         plt.xlabel('wind direction °')
         plt.ylabel('wind speed kph')
-        fig1.savefig("./diagrams/monthly/heatmap_" +filename+ "_" +str(m)+ ".png")
+        fig1.savefig(diagram_path+"monthly/heatmap_" +filename+ "_" +str(m)+ ".png")
         plt.close()
         del df_tmp_month
         del df_wdir_wspd
@@ -96,7 +99,7 @@ def chart_windrose(df_tmp):
     fig3.add_axes(ax3)
     ax3.bar(df_wind["wdir"], df_wind["wspd"], normed=True, opening=1)
     ax3.set_title('wind direction with speed')
-    plt.savefig("./diagrams/windrose_wdir" + "" + ".png")
+    plt.savefig(diagram_path+"windrose_wdir" + "" + ".png")
     plt.close()
 
 
@@ -116,7 +119,7 @@ def chart_windrose_yearly(df_tmp):
         fig3.add_axes(ax3)
         ax3.bar(df_wind["wdir"], df_wind["wspd"], normed=True, opening=1)
         ax3.set_title('wind direction with speed for year ' +str(y))
-        plt.savefig("./diagrams/yearly/windrose_wdir" + str(y) + ".png")
+        plt.savefig(diagram_path+"yearly/windrose_wdir" + str(y) + ".png")
         plt.close()
 
 
@@ -130,7 +133,7 @@ def chart_ym_heatmap(df_tmp, fields, filename, title, xlabel, ylabel, cmap):
     sns.heatmap(df_pivot, ax=ax2, cmap=cmap, annot=True, fmt='g')
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    fig2.savefig("./diagrams/heatmap_" + filename + ".png")
+    fig2.savefig(diagram_path+"heatmap_" + filename + ".png")
     plt.close()
     del df_pivot
 
@@ -141,7 +144,7 @@ def chart_freq(df_tmp, filename, title, xlabel, ylabel, bins=50):
     f = sns.displot(df_tmp)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.savefig("./diagrams/distplot_" + filename + ".png")
+    plt.savefig(diagram_path+"distplot_" + filename + ".png")
     plt.close()
 
 
@@ -165,7 +168,7 @@ def chart_precip_sum_ym(df_tmp):
     ax1.set_xlabel("Year-Month")
     ax1.set_ylabel("recipation in mm", labelpad=10)
     ax1.set_title("Year-Month precipation sum")
-    fig1.savefig("./diagrams/lineplot_ym_precip_sum.png")
+    fig1.savefig(diagram_path+"lineplot_ym_precip_sum.png")
     plt.close()
 
 
@@ -193,7 +196,7 @@ def chart_precip_sum_yw(df_tmp):
     ax1.set_xlabel("Year-week")
     ax1.set_ylabel("recipation in mm", labelpad=10)
     ax1.set_title("Year-week precipation sum")
-    fig1.savefig("./diagrams/lineplot_yw_precip_sum.png")
+    fig1.savefig(diagram_path+"lineplot_yw_precip_sum.png")
     plt.close()
 
 
@@ -207,7 +210,7 @@ def chart_precip_sum_to_h_yearly(df_tmp, df_tmp_grp):
         g1 = sns.pairplot(df_grp_tmp[['precip_sum', 'precip_h_sum', 'stored_grp_min']]
                           , hue="stored_grp_min", diag_kind='kde', plot_kws={"s": 8})
         plt.suptitle('Year-Month precipation sum to hours')
-        g1.savefig("./diagrams/yearly/pairplot_precip_sum_h" + str(y) + ".png")
+        g1.savefig(diagram_path+"yearly/pairplot_precip_sum_h" + str(y) + ".png")
         plt.close()
 
 
@@ -224,7 +227,7 @@ def chart_precip_month(df_tmp, filename):
     # ax1.set_title("Continent correlation")
     plt.xlabel('month')
     plt.ylabel('rain fall in mm grouped')
-    fig1.savefig("./diagrams/heatmap_" + filename + ".png")
+    fig1.savefig(diagram_path+"heatmap_" + filename + ".png")
     plt.close()
 
 
@@ -238,7 +241,7 @@ def chart_df_totals(df_tmp_grp):
     # tab.auto_set_font_size(False)
     # tab.set_fontsize(8)
     # tab.scale(1.2, 1.2)
-    plt.savefig('./diagrams/df_totals.png', transparent=True)
+    plt.savefig(diagram_path+"df_totals.png", transparent=True)
     plt.close()
 
 

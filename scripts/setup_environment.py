@@ -10,7 +10,8 @@ import configparser
 from pathlib import Path
 
 
-PROJECT_ROOT = Path(__file__).parents[1]
+def get_project_root():
+    return Path(__file__).parents[1]
 
 
 def get_config():
@@ -21,6 +22,7 @@ def get_config():
         return:
             ConfigParser object
     """
+    PROJECT_ROOT = get_project_root()
     config = configparser.ConfigParser()
     config_file = "{}\settings\settings.ini".format(PROJECT_ROOT)
     key_file = "{}\settings\key.ini".format(PROJECT_ROOT)
