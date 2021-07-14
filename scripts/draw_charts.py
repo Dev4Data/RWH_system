@@ -1,3 +1,33 @@
+"""show and save diagrams to understand the weather data and performance of the RWH components
+author: Matthis (matthis@email.de)
+description:
+    diverse methods to show diagrams with weather data
+    and RWH performance data
+
+functions:
+    load_csv - load the weatherdata from csv file and calculate required and some need additional data
+    init_rwh_data - initialise empty fields for later filling with rwh data
+    calc_rwh_collection - calculate the collected amount of water from one roof
+    calc_rwh_system - calculate the performance of the RWH design according to the specified parameters
+    group_rwh_data_ym - group the data by year-month and calculate some aggregates
+    main - method process to order the calls of the methods and set parameters to create a RWH system
+
+    chart_wspd_wdir - show wind speed vs. wind direction
+    chart_wspd_wdir_monthly - show wind speed vs. wind direction for each month separate
+    chart_windrose - show the wind rose for all time
+    chart_windrose_yearly - show the wind rose for each year separate
+    chart_ym_heatmap - create a heatmap from two given fields from the DataFrame on the year month grouping
+    chart_freq - show a histogram for a particular defined field
+    chart_precip_sum_ym - show the precipitation total per year-month
+    chart_precip_sum_yw - show the precipitation total per year-week
+    chart_precip_sum_to_h_yearly - show the hours of precipitation per month for every year separate
+    chart_precip_month - show the categorized precipitation data per month
+    chart_df_totals - print the table with the totals
+
+return:
+    all charts are saved as *.png files and can be find in the diagrams folder
+
+"""
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -13,11 +43,11 @@ env.set_pd_environments()
 # constants
 config = env.get_config()
 """Parameters"""
-cat_month = pd.CategoricalDtype(eval(config['dwh']['month_order']), ordered=True)
+cat_month = pd.CategoricalDtype(eval(config['rwh']['month_order']), ordered=True)
 
 
 def chart_wspd_wdir(df_tmp, filename):
-    """wind speed vs wind direction chart"""
+    """wind speed vs wind direction chart total"""
     df_tmp.reset_index(drop=False, inplace=True)
     df_wdir_wspd \
         = df_tmp.pivot_table(index='wspd_5', columns='wdir_10', values='yyyy_mm', aggfunc='count')
@@ -35,7 +65,7 @@ def chart_wspd_wdir(df_tmp, filename):
 
 
 def chart_wspd_wdir_monthly(df_tmp, filename):
-    """wind speed vs wind direction chart"""
+    """wind speed vs wind direction chart per month"""
     df_tmp.reset_index(drop=False, inplace=True)
     for m in range(1, 12):
         df_tmp_month = df_tmp[df_tmp["month"] == m]
@@ -56,6 +86,7 @@ def chart_wspd_wdir_monthly(df_tmp, filename):
 
 
 def chart_windrose(df_tmp):
+    """wind rose with wind speed and direction"""
     from windrose import WindroseAxes
 
     df_wind = df_tmp[['wdir','wspd']]
@@ -70,6 +101,7 @@ def chart_windrose(df_tmp):
 
 
 def chart_windrose_yearly(df_tmp):
+    """wind rose with wind speed and direction separate for each year"""
     from windrose import WindroseAxes
 
     # Create figure and plot space
@@ -89,7 +121,8 @@ def chart_windrose_yearly(df_tmp):
 
 
 def chart_ym_heatmap(df_tmp, fields, filename, title, xlabel, ylabel, cmap):
-    """heatmap chart; enter jest a df with 3 fields"""
+    """heatmap chart that shows the 3 entered fields
+            please enter a dataFrame with exactly 3 fields"""
     # df_tmp.reset_index(drop=False, inplace=True)
     df_pivot = df_tmp.pivot(fields[0], fields[1], fields[2])
     fig2, (ax2) = plt.subplots(1, 1, figsize=(20, 12))
@@ -103,7 +136,7 @@ def chart_ym_heatmap(df_tmp, fields, filename, title, xlabel, ylabel, cmap):
 
 
 def chart_freq(df_tmp, filename, title, xlabel, ylabel, bins=50):
-    """frequency chart"""
+    """histogram of the ne field of the dataFrame """
     f = plt.figure(figsize=(20, 12))
     f = sns.displot(df_tmp)
     plt.xlabel(xlabel)
@@ -113,17 +146,22 @@ def chart_freq(df_tmp, filename, title, xlabel, ylabel, bins=50):
 
 
 def chart_precip_sum_ym(df_tmp):
+    """lineplot precip_sum per year-month"""
+    import datetime
     # Create figure and plot space
+    df_tmp.reset_index(inplace=True)
+    df_tmp = df_tmp[df_tmp['year'] >= datetime.datetime.today().year -7]
     fig1, (ax1) = plt.subplots(1, 1, figsize=(15, 8))
     fig1.suptitle('Year-Month charts')
-    sns.set(style="darkgrid", rc={"lines.linewidth": 1, "legend.fontsize": 8, "legend.loc": 'upper left'})
+    sns.set(style="darkgrid"
+            , rc={"lines.linewidth": 1, "legend.fontsize": 8, "legend.loc": 'upper center'})
     sns.lineplot(data=df_tmp, sort=False,
-                 x='yyyy_mm', y="precip_sum",
-                 # hue="continent",
+                 x='month', y="precip_sum",
+                 hue="year",
                  # size="precip_sum",
-                 # style="darkgrid",
-                 # legend='brief',
+                 legend='full', palette='Paired', markers=True,
                  )
+    ax1.set(xticks=df.month.values)
     ax1.set_xlabel("Year-Month")
     ax1.set_ylabel("recipation in mm", labelpad=10)
     ax1.set_title("Year-Month precipation sum")
@@ -131,8 +169,36 @@ def chart_precip_sum_ym(df_tmp):
     plt.close()
 
 
-def chart_precip_sum_to_h_yearly(df_tmp, df_tmp_grp):
+def chart_precip_sum_yw(df_tmp):
+    """lineplot precip_sum per year-week"""
+    import datetime
     # Create figure and plot space
+#    df_tmp.reset_index(inplace=True)
+    df_tmp = df_tmp[df_tmp['year'] >= datetime.datetime.today().year -7]
+    df_tmp_grp = df_tmp.groupby(['year','week'], as_index=True, sort=True) \
+        .agg(precip_sum=("precip", "sum")
+             , precip_std=("precip", np.std)
+             )
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(15, 8))
+    fig1.suptitle('Year-Week charts')
+    sns.set(style="darkgrid"
+            , rc={"lines.linewidth": 1, "legend.fontsize": 8, "legend.loc": 'upper center'})
+    sns.lineplot(data=df_tmp_grp, sort=False,
+                 x='week', y="precip_sum",
+                 hue="year",
+                 # size="precip_std", #style="precip_std",
+                 legend='full', palette='Paired', markers=True,
+                 )
+    ax1.set(xticks=df.week.values)
+    ax1.set_xlabel("Year-week")
+    ax1.set_ylabel("recipation in mm", labelpad=10)
+    ax1.set_title("Year-week precipation sum")
+    fig1.savefig("./diagrams/lineplot_yw_precip_sum.png")
+    plt.close()
+
+
+def chart_precip_sum_to_h_yearly(df_tmp, df_tmp_grp):
+    """pairplot of precip_sum, precip_h_sum and stored_grp_min separate for each year"""
     df_tmp_grp.reset_index(inplace=True)
     years = df_tmp['year'].unique()
     for y in years:
@@ -145,21 +211,8 @@ def chart_precip_sum_to_h_yearly(df_tmp, df_tmp_grp):
         plt.close()
 
 
-def chart_df_totals(df_tmp_grp):
-    f = plt.figure(figsize=(20, 12))
-    ax = f.add_subplot(111, frame_on=False)
-    ax.xaxis.set_visible(False)
-    ax.yaxis.set_visible(False)
-    tab = pd.plotting.table(ax, df_tmp_grp, loc='upper right')
-    # tab.auto_set_font_size(False)
-    # tab.set_fontsize(8)
-    # tab.scale(1.2, 1.2)
-    plt.savefig('./diagrams/df_totals.png', transparent=True)
-    plt.close()
-
-
 def chart_precip_month(df_tmp, filename):
-    """wind speed vs wind direction chart"""
+    """heatmap of the categorized precipitation per year-month"""
 #    df_tmp.reset_index(drop=False, inplace=True)
     df_tmp = df_tmp[df_tmp['precip_grp'] != '00']
     df_precip_month \
@@ -172,6 +225,20 @@ def chart_precip_month(df_tmp, filename):
     plt.xlabel('month')
     plt.ylabel('rain fall in mm grouped')
     fig1.savefig("./diagrams/heatmap_" + filename + ".png")
+    plt.close()
+
+
+def chart_df_totals(df_tmp_grp):
+    """plot table with totls of the DataFrame"""
+    f = plt.figure(figsize=(20, 12))
+    ax = f.add_subplot(111, frame_on=False)
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+    tab = pd.plotting.table(ax, df_tmp_grp, loc='upper right')
+    # tab.auto_set_font_size(False)
+    # tab.set_fontsize(8)
+    # tab.scale(1.2, 1.2)
+    plt.savefig('./diagrams/df_totals.png', transparent=True)
     plt.close()
 
 
@@ -199,7 +266,8 @@ chart_freq(df["wspd"], "wspd", 'Frequency of speed of the wind (kph/yyyy-mm)'
     , 'wind speed in kph', "#", 50)
 chart_freq(df["wdir"], "wdir", 'Frequency of the wind direction (°/yyyy-mm)'
     , 'wind direction in °', "#", 50)
-# chart_precip_sum_ym(df_ym)
+chart_precip_sum_ym(df_ym)
+chart_precip_sum_yw(df)
 # chart_precip_sum_to_h(df, df_ym)
 
 df_rsm, df_rsm_total = data.group_rwh_data_ym(df, ['rain_season', 'month'], False)

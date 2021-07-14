@@ -1,3 +1,24 @@
+"""wrangle the data and calculate the rain water harvesting (RWH) system
+author: Matthis (matthis@email.de)
+description:
+    clean, wrangle and enrich the weather data
+    calculate the RWH systems with the parameters from the settings.ini
+    and aggregate it for later analyses and visualisation
+
+functions:
+    load_csv - load the weatherdata from csv file and calculate required and some need additional data
+    init_rwh_data - initialise empty fields for later filling with rwh data
+    calc_rwh_collection - calculate the collected amount of water from one roof
+    calc_rwh_system - calculate the performance of the RWH design according to the specified parameters
+    group_rwh_data_ym - group the data by year-month and calculate some aggregates
+    main - method process to order the calls of the methods and set parameters to create a RWH system
+return:
+    three DataFrames
+    df - dataset with all calculated data for the RWH system
+    df_total - summary (like df.describe()) to show a description of the DataFrame
+    df_ym - aggregated dataset on year-month basis
+
+"""
 import pandas as pd
 import numpy as np
 import os
@@ -12,7 +33,17 @@ config = env.get_config()
 
 
 def load_csv(show_data_overview=False):
-    """load and show data"""
+    """method that load, wrangle and enrich data from weather csv
+            datetime data is split in different fields and wrangled
+            precipitation data is enriched
+            and some data is also categorized in ranges
+            unnecessary fields are also dropped
+
+        parameters:
+            show_data_overview - True => some prints to show an overview of the data
+        return:
+            DataFrame with the data
+    """
     df_tmp = pd.read_csv(config['files']['weatherFile'])
 
     """wrangle and clean data"""
@@ -28,6 +59,7 @@ def load_csv(show_data_overview=False):
     df_tmp['year'] = df_tmp['date'].dt.year
     df_tmp['month'] = df_tmp['date'].dt.month
     df_tmp['day'] = df_tmp['date'].dt.day
+    df_tmp['week'] = df_tmp['date'].dt.week
     df_tmp['yyyy_mm'] = df_tmp['date'].dt.strftime('%Y-%m')
     #    dayOfWeek = {0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}
     #    df_tmp['weekday'] = df_tmp['date'].dt.dayofweek.map(dayOfWeek)
@@ -92,7 +124,7 @@ def load_csv(show_data_overview=False):
 
 
 def init_rwh_data(rwh_data):
-    """calc rain and usages"""
+    """initialise empty fileds for RWH calculations"""
     rwh_data['collected'] = 0.0
     rwh_data['net_collected_day'] = 0.0
     rwh_data['person_consume'] = 0.0
@@ -112,12 +144,24 @@ def calc_rwh_collection\
       , max_filter_throughput
       , effective_collection_area
       , rain_buffer_volume
-      , show_data_overview=False):
-    """Test the choosen RWH components for heavy rain management
-        and return a dataset with all days the system propably couldnt manage the volume of rain
-        The max_pipe_throughput is from the gutter to the storm water tank
-        and the filter is connected after the storm water tank
-        """
+      , show_data_overview=False
+      ):
+    """method to calculate the performance of a RWH component
+            calculates the collected water and the water that overruns from gutter or filter
+            The overrun from the storage is calculated in the calc_rwh_system method.
+
+        parameters:
+            df_tmp - DataFrame with the weather data enriched with data from load_csv method
+            roof_name - pre-column name for the roof (mainly for differentiation in the dataset)
+            max_pipe_throughput - what is the smallest pipe throughput (liter/minute)
+                                    provided by your gutter and downspout
+            max_filter_throughput - what is the smallest filter throughput (liter/minute)
+            effective_collection_area - the effective collection area of your roof
+            rain_buffer_volume - size of the rain buffer tank between pipes and filter
+            show_data_overview - True => some prints to show an overview of the data
+        return:
+            a enriched dataset with the collected water and also show when the system couldnt manage the volume of rain
+    """
     # check throughputs
     if effective_collection_area > 0:
         df_tmp[roof_name+'collected_h'] = effective_collection_area * df_tmp['precip_mm_h'].fillna(0)
@@ -202,20 +246,30 @@ def calc_rwh_system \
      , garden_usage
      , storage_volume
      , tank_reserves
-     , show_data_overview=False):
-    """calc diverse data for rain water harvesting scenarios
-         avg_consumer_no => average number of persons using water (#)
-         consume => liter a persons use in average at one day (l/day)
-         storage_volume => size of all storage volumes in liter
-         garden_usage => liter are used for gardening when there is less rain/humidity (l/day)
+     , show_data_overview=False
+     ):
+    """method to calculate scenario data for rain water harvesting components
+            It calculates the fill state of the storage at a particular date
+            And how much water overrun because the storages are full
+
+        parameters:
+            rwh_data - DataFrame with weather data and RWH component data
+            avg_consumer_no => average number of persons using water (#)
+            consume => liter a persons use in average at one day (l/day)
+            garden_usage => liter are used for gardening when there is less rain/humidity (l/day)
+            storage_volume => size of all storage volumes in liter
+            tank_reserves => how empty can be the tank before you stop watering the garden
+            show_data_overview - True => some prints to show an overview of the data
+       return:
+            a enriched dataset with the RWH system performance
     """
     rwh_data['person_consume'] = avg_consumer_no * consume
     stored_last = 0.0
     for index, row in rwh_data.iterrows():
         new_storage = 0.0
         # water just when there is less rain and low humidity
-        if row['precip_7d'] < float(config['dwh']['garden_rain_min_mm']) \
-                and row['humidity'] < float(config['dwh']['garden_min_humidity']) \
+        if row['precip_7d'] < float(config['rwh']['garden_rain_min_mm']) \
+                and row['humidity'] < float(config['rwh']['garden_min_humidity']) \
                 and stored_last > tank_reserves:
             row['garden_consume'] = garden_usage
             rwh_data.at[index, 'garden_consume'] = garden_usage
@@ -232,7 +286,7 @@ def calc_rwh_system \
             stored_last = storage_volume
         elif new_storage <= 0:
             stored_last = 0
-        if 1 <= row['month'] < int(config['dwh']['season_stat_month']):
+        if 1 <= row['month'] < int(config['rwh']['season_stat_month']):
             rwh_data.at[index, 'rain_season'] = "rs" + str(row['year'] - 1)
         else:
             rwh_data.at[index, 'rain_season'] = "rs" + str(row['year'])
@@ -271,8 +325,16 @@ def calc_rwh_system \
 
 
 def group_rwh_data_ym(df, group_fields, show_data_overview=False):
-    """calc diverse data gruped by year month"""
+    """method to group the RWH dataset by defined fields
+            It calculates some aggregates and other statistical data
 
+        parameters:
+            df - DataFrame with weather data and RWH system data
+            group_fields => fields that should be used for grouping
+            show_data_overview - True => some prints to show an overview of the data
+        return:
+            a grouped dataset with statistical data
+    """
     def quantile(x, n):
         return x.quantile(n)
 
@@ -373,35 +435,36 @@ def group_rwh_data_ym(df, group_fields, show_data_overview=False):
 
 
 def main():
+    """main method to order the method calls and fill the parameters from the config file"""
     df = load_csv(False)
     df = init_rwh_data(df)
 
     # default RWH parameters
     df, df_storm_gr\
         = calc_rwh_collection\
-            (df, config['dwh']['r1_name']
-            , eval(config['dwh']['r1_max_pipe_throughput'])
-            , eval(config['dwh']['r1_max_filter_throughput'])
-            , eval(config['dwh']['r1_effective_collection_area'])
-            , eval(config['dwh']['r1_rain_buffer_volume'])
+            (df, config['rwh']['r1_name']
+            , eval(config['rwh']['r1_max_pipe_throughput'])
+            , eval(config['rwh']['r1_max_filter_throughput'])
+            , eval(config['rwh']['r1_effective_collection_area'])
+            , eval(config['rwh']['r1_rain_buffer_volume'])
             , False
             )
     df, df_storm_mr\
         = calc_rwh_collection\
-            (df, config['dwh']['r2_name']
-            , eval(config['dwh']['r2_max_pipe_throughput'])
-            , eval(config['dwh']['r2_max_filter_throughput'])
-            , eval(config['dwh']['r2_effective_collection_area'])
-            , eval(config['dwh']['r2_rain_buffer_volume'])
+            (df, config['rwh']['r2_name']
+            , eval(config['rwh']['r2_max_pipe_throughput'])
+            , eval(config['rwh']['r2_max_filter_throughput'])
+            , eval(config['rwh']['r2_effective_collection_area'])
+            , eval(config['rwh']['r2_rain_buffer_volume'])
             , False
             )
     df, df_tank\
         = calc_rwh_system(df  # rwh_data
-                         , eval(config['dwh']['avg_consumer_no'])
-                         , eval(config['dwh']['person_consume'])
-                         , eval(config['dwh']['garden_usage'])
-                         , eval(config['dwh']['storage_volume'])
-                         , eval(config['dwh']['tank_reserves'])
+                         , eval(config['rwh']['avg_consumer_no'])
+                         , eval(config['rwh']['person_consume'])
+                         , eval(config['rwh']['garden_usage'])
+                         , eval(config['rwh']['storage_volume'])
+                         , eval(config['rwh']['tank_reserves'])
                          , True  # show_data_overview
                          )
     print(df[np.logical_or(np.logical_or(df_storm_gr, df_storm_mr), df_tank)].head(30))

@@ -1,3 +1,16 @@
+"""collect weather data from visualcrossing API
+author: Matthis (matthis@email.de)
+description:
+    The weather data is collected and saved in the weather_file
+    Parameters are taken from the *.ini files (dnt forget to setup the key.ini with the visualcrossing API key)
+
+functions:
+    get_latlon_weather_json - method to access the visualcrossing API
+    get_new_weather_data - method to do one API call with the desired data and limited API requirements
+    get_weather_data_run - main method to call the get_new_weather_data several times to use daily limits
+return:
+     save the collected data in the  weather_file
+"""
 import pandas as pd
 import numpy as np
 import datetime
@@ -11,6 +24,10 @@ import setup_environment as env
 
 
 # constants
+"""some settings are saved in local variables here
+    you have to change the keys array here according to the key.ini,
+    when you a dont use the same number of keys as shown 
+"""
 config = env.get_config()
 weather_file = config['files']['weatherFile']
 keys = ['&key=' + config['visualcrossing_private']['key1']  # my key
@@ -25,7 +42,16 @@ def get_latlon_weather_json(
     date_max_in,
     use_key_num=0
 ):
-    """get historical weather data for a lat+lon position between start and end-date"""
+    """method to get historical weather data for one lat+lon position between start and end-date
+            as daily aggregate in metric unit.
+            Data is return as aggregate from the closest stations. If the point has no direct station.
+
+        parameters:
+            latlon_in position array with latitude and longitude (like [12.34567,12.34567])
+            date_min_in: data of the first entry
+        return:
+            json object with data and column description
+    """
     API_key = keys[use_key_num]
     hist_weather_url = config['visualcrossing']['hist_weather_url']
     query_location = '&location={},{}'.format(latlon_in[0], latlon_in[1])
@@ -53,12 +79,23 @@ def get_latlon_weather_json(
 
 
 def get_new_weather_data(
-    num_rows=100,
+    num_rows=99,
     use_key_num=0,
     collect_data_before_now="y"
 ):
-    """load and save weather data, calc also the from and to range dates
-        load just data where weather data is not collected yet
+    """method that find the from-date and to-date to limit the weather data API call,
+        it just load data where the weather data is not collected yet
+        it calls the get_latlon_weather_json to ask for new weather data
+
+        parameter:
+            num_rows - get this number of rows from API (from-to dates are choosen according it)
+            use_key_num - which key should be used (depending on the specified keys in the ini file)
+            collect_data_before_now
+                        - y=>collect data older than all already existing data
+                        - other-parameters=>collect data newer than all already existing data
+        return:
+                 remaining_cost - integer/# of remaining API calls
+                 filled_lines - integer/# of data that was collected
     """
     try:
         df = pd.read_csv(weather_file)
@@ -87,7 +124,7 @@ def get_new_weather_data(
             df_date_max_tmp = df_tmp["date_min"][loc] - datetime.timedelta(1)
             df_date_max = df_date_max_tmp.strftime("%Y-%m-%d")
             df_date_min_tmp = df_tmp["date_min"][loc]\
-                - datetime.timedelta(int(config['visualcrossing']['rows_per_run']))
+                - datetime.timedelta(num_rows)
             df_date_min = df_date_min_tmp.strftime("%Y-%m-%d")
         else:
             df_date_min_tmp = df_tmp["date_max"][loc] + datetime.timedelta(1)
@@ -95,7 +132,7 @@ def get_new_weather_data(
             df_date_max_tmp = \
                 np.minimum((datetime.datetime.today() - datetime.timedelta(1))
                              , df_tmp["date_max"][loc]
-                                + datetime.timedelta(int(config['visualcrossing']['rows_per_run'])))
+                                + datetime.timedelta(num_rows))
             df_date_max = df_date_max_tmp.strftime("%Y-%m-%d")
 
         # latitude+longitude of location
@@ -150,6 +187,13 @@ def get_new_weather_data(
 
 
 def get_weather_data_run():
+    """method as a skull to loop over the API keys defined
+            and  loop also x times to collect data according to the daily limit and the limit per API call
+
+        parameter:
+        return:
+                 just display some summary data
+    """
     # loop both API_keys
     print("start gather weatherdata")
     for key in range(len(keys)):
@@ -157,9 +201,10 @@ def get_weather_data_run():
         sum_filled = 0
         # loop x times each time with 50-100 rows to full fill the limits of API calls
         for i in range(int(config['visualcrossing']['loops'])):
-            get_rows = np.minimum(randint(50, 90), remain_rows_tmp)
+            get_rows = np.minimum(int(config['visualcrossing']['rows_per_run'])
+                                  , remain_rows_tmp)
             remain_rows_tmp, filled \
-                = get_new_weather_data(num_rows=get_rows
+                = get_new_weather_data( num_rows=get_rows
                                        , use_key_num=key
                                        , collect_data_before_now="n")
             sum_filled += filled

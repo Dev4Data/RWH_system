@@ -1,3 +1,10 @@
+"""global Setup of the environment
+author: Matthis (matthis@email.de)
+functions:
+    get_config - get the settings from the *.ini file(s)
+    set_pd_environments -
+
+"""
 import pandas as pd
 import configparser
 from pathlib import Path
@@ -7,6 +14,13 @@ PROJECT_ROOT = Path(__file__).parents[1]
 
 
 def get_config():
+    """method to get the configuration parameters
+            the parameters can be saved in multiple files
+
+        parameters:
+        return:
+            ConfigParser object
+    """
     config = configparser.ConfigParser()
     config_file = "{}\settings\settings.ini".format(PROJECT_ROOT)
     key_file = "{}\settings\key.ini".format(PROJECT_ROOT)
@@ -15,6 +29,8 @@ def get_config():
 
 
 def set_pd_environments():
+    """method to set environmental output parametes
+            how output tables are displayed """
     config = get_config()
     """setup pandas output environment"""
     pd.set_option('max_colwidth', eval(config.get('DEFAULT', 'displayMaxColWidth', fallback=None)))
