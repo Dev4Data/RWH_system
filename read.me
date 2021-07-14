@@ -24,14 +24,13 @@ Content:
         settings.ini with all other parameters
 
 How to:
-    01. create the /settings/key.ini file first and fill it like this
-        [visualcrossing_private]
-        key1 = ...
-        key2 = ...
-        >>Hint: you can add or remove keys
-            but then you have to change the keys array in the get_weatherdata script also
+    01. create the /settings/key.ini file first (Hint: you can add up to 10 keys)
+        Fill it like this:
+            [visualcrossing_private]
+            key1 = ...
+            key2 = ...
     02. set your latitude,longitude position in [location] section of the settings.ini
-    03. run the get_weatherdata.py script and sight the csv file
+    03. run the get_weatherdata.py script and check the csv file
     04. fill the desired RWH system parameters in the [rwh] section of the settings.ini
     05. run the draw_charts.py script (calls the calc_rwh_system at the beginning)
     06. check the diagrams

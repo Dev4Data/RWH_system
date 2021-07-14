@@ -30,10 +30,15 @@ import setup_environment as env
 """
 config = env.get_config()
 weather_file = config['files']['weatherFile']
-keys = ['&key=' + config['visualcrossing_private']['key1']  # my key
-        , '&key=' + config['visualcrossing_private']['key2']  # another key
-        ]
 remain_rows = int(config['visualcrossing']['max_rows_per_day'])
+
+keys = []
+for i in range(1, 10):
+    try:
+        keys.append('&key=' + config['visualcrossing_private']['key'+str(i)])
+    except:
+        break
+print("found {} keys in keys.ini file".format(len(keys)))
 
 
 def get_latlon_weather_json(
@@ -132,7 +137,7 @@ def get_new_weather_data(
             df_date_max_tmp = \
                 np.minimum((datetime.datetime.today() - datetime.timedelta(1))
                              , df_tmp["date_max"][loc]
-                                + datetime.timedelta(num_rows))
+                                + datetime.timedelta(int(num_rows)))
             df_date_max = df_date_max_tmp.strftime("%Y-%m-%d")
 
         # latitude+longitude of location
@@ -156,7 +161,7 @@ def get_new_weather_data(
         if msg == None\
         or msg == "nan":
             if "remainingCost" in json_data:
-                remaining_cost = json_data['remainingCost']
+                remaining_cost = int(json_data['remainingCost'])
                 print("remaining_cost: {}, at key: {}".format(remaining_cost, use_key_num))
                 if remaining_cost >= 0:
                     if "address" in json_data:
