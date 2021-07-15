@@ -1,5 +1,5 @@
 """collect weather data from visualcrossing API
-author: Matthis (matthis@email.de)
+author: Matthis
 description:
     The weather data is collected and saved in the weather_file
     Parameters are taken from the *.ini files (dnt forget to setup the key.ini with the visualcrossing API key)
