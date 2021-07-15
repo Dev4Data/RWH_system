@@ -1,5 +1,5 @@
 """show and save diagrams to understand the weather data and performance of the RWH components
-author: Matthis (matthis@email.de)
+author: Matthis (Dev4Data-github@online.ms)
 description:
     diverse methods to show diagrams with weather data
     and RWH performance data

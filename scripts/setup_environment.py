@@ -1,5 +1,5 @@
 """global Setup of the environment
-author: Matthis (matthis@email.de)
+author: Matthis (Dev4Data-github@online.ms)
 functions:
     get_config - get the settings from the *.ini file(s)
     set_pd_environments -
