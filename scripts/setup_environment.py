@@ -1,5 +1,5 @@
 """global Setup of the environment
-author: Matthis 
+author: Matthis (matthis@email.de)
 functions:
     get_config - get the settings from the *.ini file(s)
     set_pd_environments -

@@ -1,5 +1,5 @@
 """wrangle the data and calculate the rain water harvesting (RWH) system
-author: Matthis
+author: Matthis (matthis@email.de)
 description:
     clean, wrangle and enrich the weather data
     calculate the RWH systems with the parameters from the settings.ini
