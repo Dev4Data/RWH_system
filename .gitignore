@@ -1,3 +1,4 @@
 key.ini
 /settings/key.ini
-*/__pycache__
+__pycache__
+/scripts/__pycache__
