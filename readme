@@ -34,3 +34,5 @@ How to:
     04. fill the desired RWH system parameters in the [rwh] section of the settings.ini
     05. run the draw_charts.py script (calls the calc_rwh_system at the beginning)
     06. check the diagrams
+
+LICENSE: gpl-3.0
