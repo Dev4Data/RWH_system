@@ -477,10 +477,13 @@ def main():
 
 
     df_ym, df_total = group_rwh_data_ym(df, ['year', 'month'], False)
+    df_y, df_total_y = group_rwh_data_ym(df, ['year'], False)
     print("Summary of Totals")
     print(df_total)
+    print(df_total_y)
+    print(df_y)
 
-    return df, df_total, df_ym
+    return df, df_total, df_ym, df_y
 
 
 """Main run section"""

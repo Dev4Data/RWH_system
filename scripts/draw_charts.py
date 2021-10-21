@@ -148,7 +148,7 @@ def chart_freq(df_tmp, filename, title, xlabel, ylabel, bins=50):
     plt.close()
 
 
-def chart_precip_sum_ym(df_tmp):
+def chart_precip_sum_ym(df_tmp, file_name):
     """lineplot precip_sum per year-month"""
     import datetime
     # Create figure and plot space
@@ -168,7 +168,7 @@ def chart_precip_sum_ym(df_tmp):
     ax1.set_xlabel("Year-Month")
     ax1.set_ylabel("recipation in mm", labelpad=10)
     ax1.set_title("Year-Month precipation sum")
-    fig1.savefig(diagram_path+"lineplot_ym_precip_sum.png")
+    fig1.savefig(diagram_path+"lineplot"+file_name+".png")
     plt.close()
 
 
@@ -246,7 +246,7 @@ def chart_df_totals(df_tmp_grp):
 
 
 """get the data"""
-df, df_total, df_ym = rwh_system.main()
+df, df_total, df_ym, df_y = rwh_system.main()
 
 
 """plot data"""
@@ -263,15 +263,19 @@ chart_windrose_yearly(df)
 
 chart_precip_month(df, "precip_month")
 
-chart_freq(df_ym["precip_sum"], "precip_freq", 'Frequency of percipation (mm/yyyy-mm)'
+chart_freq(df_ym["precip_sum"], "precip_freq_ym", 'Frequency of percipation (mm/yyyy-mm)'
+    , 'percipation in mm grouped', "#", 50)
+chart_freq(df_y["precip_sum"], "precip_freq_y", 'Frequency of percipation (yyyy)'
     , 'percipation in mm grouped', "#", 50)
 chart_freq(df["wspd"], "wspd", 'Frequency of speed of the wind (kph/yyyy-mm)'
     , 'wind speed in kph', "#", 50)
 chart_freq(df["wdir"], "wdir", 'Frequency of the wind direction (°/yyyy-mm)'
     , 'wind direction in °', "#", 50)
-chart_precip_sum_ym(df_ym)
+chart_precip_sum_ym(df_ym, "_ym_precip_sum")
+#chart_precip_sum_ym(df_y, "_y_precip_sum")
 chart_precip_sum_yw(df)
 # chart_precip_sum_to_h(df, df_ym)
+
 
 df_rsm, df_rsm_total = rwh_system.group_rwh_data_ym(df, ['rain_season', 'month'], False)
 
