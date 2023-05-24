@@ -1,4 +1,4 @@
-Weather data collection and Rain Water Harvesting (RWH) design python scripts
+Weather data collection and Rain Water Harvesting (RWH) design python (3.9) scripts
 
 Abstract:
     This scripts are my solution to find the best RWH system design for my own project.
@@ -34,3 +34,4 @@ How to:
     04. fill the desired RWH system parameters in the [rwh] section of the settings.ini
     05. run the draw_charts.py script (calls the calc_rwh_system at the beginning)
     06. check the diagrams
+    
