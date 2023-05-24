@@ -2,3 +2,6 @@ key.ini
 /settings/key.ini
 __pycache__
 /scripts/__pycache__
+.idea
+/data
+/diagrams
