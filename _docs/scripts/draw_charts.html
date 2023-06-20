@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>yenikas_weather.scripts.draw_charts API documentation</title>
+<meta name="description" content="show and save diagrams to understand the weather data and performance of the RWH components
+author: Matthis (matthis@email.de)
+description:
+…" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>yenikas_weather.scripts.draw_charts</code></h1>
+</header>
+<section id="section-intro">
+<p>show and save diagrams to understand the weather data and performance of the RWH components
+author: Matthis (matthis@email.de)
+description:
+diverse methods to show diagrams with weather data
+and RWH performance data</p>
+<p>functions:
+load_csv - load the weatherdata from csv file and calculate required and some need additional data
+init_rwh_data - initialise empty fields for later filling with rwh data
+calc_rwh_collection - calculate the collected amount of water from one roof
+calc_rwh_system - calculate the performance of the RWH design according to the specified parameters
+group_rwh_data_ym - group the data by year-month and calculate some aggregates
+main - method process to order the calls of the methods and set parameters to create a RWH system</p>
+<pre><code>chart_wspd_wdir - show wind speed vs. wind direction
+chart_wspd_wdir_monthly - show wind speed vs. wind direction for each month separate
+chart_windrose - show the wind rose for all time
+chart_windrose_yearly - show the wind rose for each year separate
+chart_ym_heatmap - create a heatmap from two given fields from the DataFrame on the year month grouping
+chart_freq - show a histogram for a particular defined field
+chart_precip_sum_ym - show the precipitation total per year-month
+chart_precip_sum_yw - show the precipitation total per year-week
+chart_precip_sum_to_h_yearly - show the hours of precipitation per month for every year separate
+chart_precip_month - show the categorized precipitation data per month
+chart_df_totals - print the table with the totals
+</code></pre>
+<p>return:
+all charts are saved as *.png files and can be find in the diagrams folder</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;show and save diagrams to understand the weather data and performance of the RWH components
+author: Matthis (matthis@email.de)
+description:
+    diverse methods to show diagrams with weather data
+    and RWH performance data
+
+functions:
+    load_csv - load the weatherdata from csv file and calculate required and some need additional data
+    init_rwh_data - initialise empty fields for later filling with rwh data
+    calc_rwh_collection - calculate the collected amount of water from one roof
+    calc_rwh_system - calculate the performance of the RWH design according to the specified parameters
+    group_rwh_data_ym - group the data by year-month and calculate some aggregates
+    main - method process to order the calls of the methods and set parameters to create a RWH system
+
+    chart_wspd_wdir - show wind speed vs. wind direction
+    chart_wspd_wdir_monthly - show wind speed vs. wind direction for each month separate
+    chart_windrose - show the wind rose for all time
+    chart_windrose_yearly - show the wind rose for each year separate
+    chart_ym_heatmap - create a heatmap from two given fields from the DataFrame on the year month grouping
+    chart_freq - show a histogram for a particular defined field
+    chart_precip_sum_ym - show the precipitation total per year-month
+    chart_precip_sum_yw - show the precipitation total per year-week
+    chart_precip_sum_to_h_yearly - show the hours of precipitation per month for every year separate
+    chart_precip_month - show the categorized precipitation data per month
+    chart_df_totals - print the table with the totals
+
+return:
+    all charts are saved as *.png files and can be find in the diagrams folder
+
+&#34;&#34;&#34;
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
+
+from yenikas_weather.scripts import calc_rwh_system as rwh_system
+from yenikas_weather.scripts import setup_environment as env
+
+
+&#34;&#34;&#34;Show parameters&#34;&#34;&#34;
+env.set_pd_environments()
+# constants
+config = env.get_config()
+&#34;&#34;&#34;Parameters&#34;&#34;&#34;
+cat_month = pd.CategoricalDtype(eval(config[&#39;rwh&#39;][&#39;month_order&#39;]), ordered=True)
+
+PROJECT_ROOT = env.get_project_root()
+file_path = &#34;{}/{}&#34;.format(PROJECT_ROOT, config[&#39;files&#39;][&#39;weatherFile&#39;])
+diagram_path = &#34;{}/diagrams/&#34;.format(PROJECT_ROOT)
+
+def chart_wspd_wdir(df_tmp, filename):
+    &#34;&#34;&#34;wind speed vs wind direction chart total&#34;&#34;&#34;
+    df_tmp.reset_index(drop=False, inplace=True)
+    df_wdir_wspd \
+        = df_tmp.pivot_table(index=&#39;wspd_5&#39;, columns=&#39;wdir_10&#39;, values=&#39;yyyy_mm&#39;, aggfunc=&#39;count&#39;)
+    df_wdir_wspd.sort_index(level=0, ascending=False, inplace=True)
+
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(20, 12))
+    fig1.suptitle(&#39;Wind data wind direction to wind speed&#39;)
+
+    sns.heatmap(df_wdir_wspd, ax=ax1, cmap=&#34;YlGnBu&#34;, annot=True, linewidth=1, square=True, fmt=&#39;g&#39;)
+    # ax1.set_title(&#34;Continent correlation&#34;)
+    plt.xlabel(&#39;wind direction °&#39;)
+    plt.ylabel(&#39;wind speed kph&#39;)
+    fig1.savefig(diagram_path+&#34;heatmap_&#34; + filename + &#34;.png&#34;)
+    plt.close()
+
+
+def chart_wspd_wdir_monthly(df_tmp, filename):
+    &#34;&#34;&#34;wind speed vs wind direction chart per month&#34;&#34;&#34;
+    df_tmp.reset_index(drop=False, inplace=True)
+    for m in range(1, 12):
+        df_tmp_month = df_tmp[df_tmp[&#34;month&#34;] == m]
+        df_wdir_wspd \
+            = df_tmp_month.pivot_table(index=&#39;wspd_5&#39;, columns=&#39;wdir_10&#39;, values=&#39;yyyy_mm&#39;, aggfunc=&#39;count&#39;)
+        df_wdir_wspd.sort_index(level=0, ascending=False, inplace=True)
+
+        fig1, (ax1) = plt.subplots(1, 1, figsize=(20, 12))
+        fig1.suptitle(&#39;Wind data wind direction to wind speed for month &#39;+str(m))
+        sns.heatmap(df_wdir_wspd, ax=ax1, cmap=&#34;YlGnBu&#34;, annot=True, linewidth=1, square=True, fmt=&#39;g&#39;)
+        # ax1.set_title(&#34;Continent correlation&#34;)
+        plt.xlabel(&#39;wind direction °&#39;)
+        plt.ylabel(&#39;wind speed kph&#39;)
+        fig1.savefig(diagram_path+&#34;monthly/heatmap_&#34; +filename+ &#34;_&#34; +str(m)+ &#34;.png&#34;)
+        plt.close()
+        del df_tmp_month
+        del df_wdir_wspd
+
+
+def chart_windrose(df_tmp):
+    &#34;&#34;&#34;wind rose with wind speed and direction&#34;&#34;&#34;
+    from windrose import WindroseAxes
+
+    df_wind = df_tmp[[&#39;wdir&#39;,&#39;wspd&#39;]]
+    fig3 = plt.figure(figsize=(7, 7), dpi=80, facecolor=&#39;w&#39;, edgecolor=&#39;w&#39;)
+    rect = [0.15, 0.15, 0.7, 0.7]
+    ax3 = WindroseAxes(fig3, rect)
+    fig3.add_axes(ax3)
+    ax3.bar(df_wind[&#34;wdir&#34;], df_wind[&#34;wspd&#34;], normed=True, opening=1)
+    ax3.set_title(&#39;wind direction with speed&#39;)
+    plt.savefig(diagram_path+&#34;windrose_wdir&#34; + &#34;&#34; + &#34;.png&#34;)
+    plt.close()
+
+
+def chart_windrose_yearly(df_tmp):
+    &#34;&#34;&#34;wind rose with wind speed and direction separate for each year&#34;&#34;&#34;
+    from windrose import WindroseAxes
+
+    # Create figure and plot space
+#    df_tmp.reset_index(inplace=True)
+    years = df_tmp[&#39;year&#39;].unique()
+    for y in years:
+        df_wind = df_tmp[df_tmp[&#34;year&#34;] == y]
+        df_wind = df_wind[[&#39;wdir&#39;, &#39;wspd&#39;]]
+        fig3 = plt.figure(figsize=(7, 7), dpi=80, facecolor=&#39;w&#39;, edgecolor=&#39;w&#39;)
+        rect = [0.15, 0.15, 0.7, 0.7]
+        ax3 = WindroseAxes(fig3, rect)
+        fig3.add_axes(ax3)
+        ax3.bar(df_wind[&#34;wdir&#34;], df_wind[&#34;wspd&#34;], normed=True, opening=1)
+        ax3.set_title(&#39;wind direction with speed for year &#39; +str(y))
+        plt.savefig(diagram_path+&#34;yearly/windrose_wdir&#34; + str(y) + &#34;.png&#34;)
+        plt.close()
+
+
+def chart_ym_heatmap(df_tmp, fields, filename, title, xlabel, ylabel, cmap):
+    &#34;&#34;&#34;heatmap chart that shows the 3 entered fields
+            please enter a dataFrame with exactly 3 fields&#34;&#34;&#34;
+    # df_tmp.reset_index(drop=False, inplace=True)
+    df_pivot = df_tmp.pivot(fields[0], fields[1], fields[2])
+    fig2, (ax2) = plt.subplots(1, 1, figsize=(20, 12))
+    fig2.suptitle(title)
+    sns.heatmap(df_pivot, ax=ax2, cmap=cmap, annot=True, fmt=&#39;g&#39;)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    fig2.savefig(diagram_path+&#34;heatmap_&#34; + filename + &#34;.png&#34;)
+    plt.close()
+    del df_pivot
+
+
+def chart_freq(df_tmp, filename, title, xlabel, ylabel, bins=50):
+    &#34;&#34;&#34;histogram of the ne field of the dataFrame &#34;&#34;&#34;
+    f = plt.figure(figsize=(20, 12))
+    f = sns.displot(df_tmp)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.savefig(diagram_path+&#34;distplot_&#34; + filename + &#34;.png&#34;)
+    plt.close()
+
+
+def chart_precip_sum_ym(df_tmp):
+    &#34;&#34;&#34;lineplot precip_sum per year-month&#34;&#34;&#34;
+    import datetime
+    # Create figure and plot space
+    df_tmp.reset_index(inplace=True)
+    df_tmp = df_tmp[df_tmp[&#39;year&#39;] &gt;= datetime.datetime.today().year -7]
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(15, 8))
+    fig1.suptitle(&#39;Year-Month charts&#39;)
+    sns.set(style=&#34;darkgrid&#34;
+            , rc={&#34;lines.linewidth&#34;: 1, &#34;legend.fontsize&#34;: 8, &#34;legend.loc&#34;: &#39;upper center&#39;})
+    sns.lineplot(data=df_tmp, sort=False,
+                 x=&#39;month&#39;, y=&#34;precip_sum&#34;,
+                 hue=&#34;year&#34;,
+                 # size=&#34;precip_sum&#34;,
+                 legend=&#39;full&#39;, palette=&#39;Paired&#39;, markers=True,
+                 )
+    ax1.set(xticks=df.month.values)
+    ax1.set_xlabel(&#34;Year-Month&#34;)
+    ax1.set_ylabel(&#34;recipation in mm&#34;, labelpad=10)
+    ax1.set_title(&#34;Year-Month precipation sum&#34;)
+    fig1.savefig(diagram_path+&#34;lineplot_ym_precip_sum.png&#34;)
+    plt.close()
+
+
+def chart_precip_sum_yw(df_tmp):
+    &#34;&#34;&#34;lineplot precip_sum per year-week&#34;&#34;&#34;
+    import datetime
+    # Create figure and plot space
+#    df_tmp.reset_index(inplace=True)
+    df_tmp = df_tmp[df_tmp[&#39;year&#39;] &gt;= datetime.datetime.today().year -7]
+    df_tmp_grp = df_tmp.groupby([&#39;year&#39;,&#39;week&#39;], as_index=True, sort=True) \
+        .agg(precip_sum=(&#34;precip&#34;, &#34;sum&#34;)
+             , precip_std=(&#34;precip&#34;, np.std)
+             )
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(15, 8))
+    fig1.suptitle(&#39;Year-Week charts&#39;)
+    sns.set(style=&#34;darkgrid&#34;
+            , rc={&#34;lines.linewidth&#34;: 1, &#34;legend.fontsize&#34;: 8, &#34;legend.loc&#34;: &#39;upper center&#39;})
+    sns.lineplot(data=df_tmp_grp, sort=False,
+                 x=&#39;week&#39;, y=&#34;precip_sum&#34;,
+                 hue=&#34;year&#34;,
+                 # size=&#34;precip_std&#34;, #style=&#34;precip_std&#34;,
+                 legend=&#39;full&#39;, palette=&#39;Paired&#39;, markers=True,
+                 )
+    ax1.set(xticks=df.week.values)
+    ax1.set_xlabel(&#34;Year-week&#34;)
+    ax1.set_ylabel(&#34;recipation in mm&#34;, labelpad=10)
+    ax1.set_title(&#34;Year-week precipation sum&#34;)
+    fig1.savefig(diagram_path+&#34;lineplot_yw_precip_sum.png&#34;)
+    plt.close()
+
+
+def chart_precip_sum_to_h_yearly(df_tmp, df_tmp_grp):
+    &#34;&#34;&#34;pairplot of precip_sum, precip_h_sum and stored_grp_min separate for each year&#34;&#34;&#34;
+    df_tmp_grp.reset_index(inplace=True)
+    years = df_tmp[&#39;year&#39;].unique()
+    for y in years:
+        df_grp_tmp = df_tmp_grp[df_tmp_grp[&#34;year&#34;] == y]
+        df_grp_tmp.set_index([&#39;year&#39;, &#39;month&#39;], inplace=True)
+        g1 = sns.pairplot(df_grp_tmp[[&#39;precip_sum&#39;, &#39;precip_h_sum&#39;, &#39;stored_grp_min&#39;]]
+                          , hue=&#34;stored_grp_min&#34;, diag_kind=&#39;kde&#39;, plot_kws={&#34;s&#34;: 8})
+        plt.suptitle(&#39;Year-Month precipation sum to hours&#39;)
+        g1.savefig(diagram_path+&#34;yearly/pairplot_precip_sum_h&#34; + str(y) + &#34;.png&#34;)
+        plt.close()
+
+
+def chart_precip_month(df_tmp, filename):
+    &#34;&#34;&#34;heatmap of the categorized precipitation per year-month&#34;&#34;&#34;
+#    df_tmp.reset_index(drop=False, inplace=True)
+    df_tmp = df_tmp[df_tmp[&#39;precip_grp&#39;] != &#39;00&#39;]
+    df_precip_month \
+        = df_tmp.pivot_table(index=&#39;precip_grp&#39;, columns=&#39;month&#39;, values=&#39;yyyy_mm&#39;, aggfunc=&#39;count&#39;)
+    df_precip_month.sort_index(level=0, ascending=False, inplace=True)
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(20, 12))
+    fig1.suptitle(&#39;rain fall per month&#39;)
+    sns.heatmap(df_precip_month, ax=ax1, cmap=&#34;YlGnBu&#34;, annot=True, linewidth=1, square=True, fmt=&#39;g&#39;)
+    # ax1.set_title(&#34;Continent correlation&#34;)
+    plt.xlabel(&#39;month&#39;)
+    plt.ylabel(&#39;rain fall in mm grouped&#39;)
+    fig1.savefig(diagram_path+&#34;heatmap_&#34; + filename + &#34;.png&#34;)
+    plt.close()
+
+
+def chart_df_totals(df_tmp_grp):
+    &#34;&#34;&#34;plot table with totls of the DataFrame&#34;&#34;&#34;
+    f = plt.figure(figsize=(20, 12))
+    ax = f.add_subplot(111, frame_on=False)
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+    tab = pd.plotting.table(ax, df_tmp_grp, loc=&#39;upper right&#39;)
+    # tab.auto_set_font_size(False)
+    # tab.set_fontsize(8)
+    # tab.scale(1.2, 1.2)
+    plt.savefig(diagram_path+&#34;df_totals.png&#34;, transparent=True)
+    plt.close()
+
+
+&#34;&#34;&#34;get the data&#34;&#34;&#34;
+df, df_total, df_ym = rwh_system.main()
+
+
+&#34;&#34;&#34;plot data&#34;&#34;&#34;
+sns.set_theme()
+axis_font = {&#39;fontname&#39;: &#39;Arial&#39;, &#39;size&#39;: &#39;6&#39;}
+
+chart_df_totals(df_total)
+
+chart_wspd_wdir(df, &#34;wdir_wspd&#34;)
+chart_wspd_wdir_monthly(df, &#34;wdir_wspd&#34;)
+
+chart_windrose(df)
+chart_windrose_yearly(df)
+
+chart_precip_month(df, &#34;precip_month&#34;)
+
+chart_freq(df_ym[&#34;precip_sum&#34;], &#34;precip_freq&#34;, &#39;Frequency of percipation (mm/yyyy-mm)&#39;
+    , &#39;percipation in mm grouped&#39;, &#34;#&#34;, 50)
+chart_freq(df[&#34;wspd&#34;], &#34;wspd&#34;, &#39;Frequency of speed of the wind (kph/yyyy-mm)&#39;
+    , &#39;wind speed in kph&#39;, &#34;#&#34;, 50)
+chart_freq(df[&#34;wdir&#34;], &#34;wdir&#34;, &#39;Frequency of the wind direction (°/yyyy-mm)&#39;
+    , &#39;wind direction in °&#39;, &#34;#&#34;, 50)
+chart_precip_sum_ym(df_ym)
+chart_precip_sum_yw(df)
+# chart_precip_sum_to_h(df, df_ym)
+
+df_rsm, df_rsm_total = rwh_system.group_rwh_data_ym(df, [&#39;rain_season&#39;, &#39;month&#39;], False)
+
+df_rsm.reset_index(drop=False, inplace=True)
+df_rsm[&#39;month&#39;] = df_rsm[&#39;month&#39;].astype(cat_month)
+# df = df.sort_values([&#39;rain_season&#39;, &#39;month&#39;])
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;precip_sum&#34;]
+    , &#34;precip_sum_ym&#34;, &#34;amount of rain in mm/m² &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;YlGnBu&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;precip_h_sum&#34;]
+    , &#34;precip_h_sum_ym&#34;, &#34;hours of rain &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;YlGnBu&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;precip_h_avg&#34;]
+    , &#34;precip_h_avg_ym&#34;, &#34;average hours of rain per day&#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;YlGnBu&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;precip_h_med&#34;]
+    , &#34;precip_h_med_ym&#34;, &#34;median hours of rain per day&#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;YlGnBu&#34;)
+
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;dry_day_sum&#34;]
+    , &#34;dry_day_sum_ym&#34;, &#34;# of days without rain &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;coolwarm&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;wet_day_sum&#34;]
+    , &#34;wet_day_sum_ym&#34;, &#34;# of days with rain &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;YlGnBu&#34;)
+
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;precip_mm_h_avg&#34;]
+    , &#34;precip_mm_h_avg_ym&#34;, &#34;average rainfall in mm/h &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;coolwarm&#34;)
+cmap = LinearSegmentedColormap.from_list(&#39;ryg&#39;, [&#34;white&#34;, &#34;lightblue&#34;, &#34;blue&#34;, &#34;lavender&#34;, &#34;orange&#34;, &#34;orangered&#34;\
+    , &#34;red&#34;, &#34;maroon&#34;, &#34;plum&#34;, &#34;violet&#34;, &#34;purple&#34;], N=1024)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;precip_mm_h_max&#34;]
+    , &#34;precip_mm_h_max_ym&#34;, &#34;maximum rainfall in mm/h &#34;, &#34;month&#34;, &#34;rain season&#34;, cmap)
+
+cmap = LinearSegmentedColormap.from_list(&#39;ryg&#39;, [&#34;darkred&#34;, &#34;yellow&#34;, &#34;lightyellow&#34;
+    , &#34;yellowgreen&#34;, &#34;lightgreen&#34;, &#34;palegreen&#34;, &#34;green&#34;, &#34;darkgreen&#34;, &#34;fuchsia&#34;, &#34;violet&#34;, &#34;purple&#34;], N=1024)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;collected_sum&#34;]
+    , &#34;collected_sum_ym&#34;, &#34;amount of rain collected in l &#34;, &#34;month&#34;, &#34;rain season&#34;, cmap)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;net_collected_sum&#34;]
+    , &#34;net_collected_sum_ym&#34;, &#34;(net)amount of rain collected in l &#34;, &#34;month&#34;, &#34;rain season&#34;, cmap)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;overrun_sum&#34;]
+    , &#34;overrun_sum_ym&#34;, &#34;total amount of rain that couldnt be stored in l &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;YlGnBu&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;net_overrun_sum&#34;]
+    , &#34;net_overrun_sum_ym&#34;, &#34;(net)amount of rain that didnt reach the tank in l &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;YlGnBu&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;tank_overrun_sum&#34;]
+    , &#34;tank_overrun_sum_ym&#34;, &#34;(net)amount of rain that couldnt be stored in l &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;YlGnBu&#34;)
+
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;person_sum&#34;]
+    , &#34;person_sum_ym&#34;, &#34; water used by persons in l &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;RdYlGn&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;garden_sum&#34;]
+    , &#34;garden_sum_ym&#34;, &#34; water used for the garden in l &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;RdYlGn&#34;)
+
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;stored_min&#34;]
+    , &#34;stored_min_ym&#34;, &#34;minimum fill state of the water storage in l &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;RdYlGn&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;stored_max&#34;]
+    , &#34;stored_max_ym&#34;, &#34;maximum fill state of the water storage in l &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;RdYlGn&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;tank_empty_sum&#34;]
+    , &#34;tank_empty_sum_ym&#34;, &#34;# of days the water storage is empty &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;coolwarm&#34;)
+chart_ym_heatmap(df_rsm, [&#34;rain_season&#34;, &#34;month&#34;, &#34;tank_low_sum&#34;]
+    , &#34;tank_low_sum_ym&#34;, &#34;# of days the water storage is below 10% &#34;, &#34;month&#34;, &#34;rain season&#34;, &#34;coolwarm&#34;)
+
+df_ym.reset_index(drop=False, inplace=True)
+chart_ym_heatmap(df_ym, [&#34;year&#34;, &#34;month&#34;, &#34;temp_min&#34;]
+    , &#34;temp_min_ym&#34;, &#34;minimum temperature in °C &#34;, &#34;month&#34;, &#34;year&#34;, &#34;coolwarm&#34;)
+chart_ym_heatmap(df_ym, [&#34;year&#34;, &#34;month&#34;, &#34;temp_avg&#34;]
+    , &#34;temp_avg_ym&#34;, &#34;average temperature in °C &#34;, &#34;month&#34;, &#34;year&#34;, &#34;coolwarm&#34;)
+chart_ym_heatmap(df_ym, [&#34;year&#34;, &#34;month&#34;, &#34;temp_max&#34;]
+    , &#34;temp_max_ym&#34;, &#34;maximum temperature in °C &#34;, &#34;month&#34;, &#34;year&#34;, &#34;coolwarm&#34;)
+
+chart_ym_heatmap(df_ym, [&#34;year&#34;, &#34;month&#34;, &#34;humidity_min&#34;]
+    , &#34;humidity_min_ym&#34;, &#34;minimum humidity in % &#34;, &#34;month&#34;, &#34;year&#34;, &#34;RdYlGn&#34;)
+chart_ym_heatmap(df_ym, [&#34;year&#34;, &#34;month&#34;, &#34;humidity_avg&#34;]
+    , &#34;humidity_avg_ym&#34;, &#34;average humidity in % &#34;, &#34;month&#34;, &#34;year&#34;, &#34;RdYlGn&#34;)
+chart_ym_heatmap(df_ym, [&#34;year&#34;, &#34;month&#34;, &#34;humidity_max&#34;]
+    , &#34;humidity_max_ym&#34;, &#34;maximum humidity in % &#34;, &#34;month&#34;, &#34;year&#34;, &#34;RdYlGn&#34;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="yenikas_weather.scripts.draw_charts.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<div class="desc"><p>Parameters</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="yenikas_weather.scripts.draw_charts.chart_df_totals"><code class="name flex">
+<span>def <span class="ident">chart_df_totals</span></span>(<span>df_tmp_grp)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>plot table with totls of the DataFrame</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_df_totals(df_tmp_grp):
+    &#34;&#34;&#34;plot table with totls of the DataFrame&#34;&#34;&#34;
+    f = plt.figure(figsize=(20, 12))
+    ax = f.add_subplot(111, frame_on=False)
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+    tab = pd.plotting.table(ax, df_tmp_grp, loc=&#39;upper right&#39;)
+    # tab.auto_set_font_size(False)
+    # tab.set_fontsize(8)
+    # tab.scale(1.2, 1.2)
+    plt.savefig(diagram_path+&#34;df_totals.png&#34;, transparent=True)
+    plt.close()</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_freq"><code class="name flex">
+<span>def <span class="ident">chart_freq</span></span>(<span>df_tmp, filename, title, xlabel, ylabel, bins=50)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>histogram of the ne field of the dataFrame</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_freq(df_tmp, filename, title, xlabel, ylabel, bins=50):
+    &#34;&#34;&#34;histogram of the ne field of the dataFrame &#34;&#34;&#34;
+    f = plt.figure(figsize=(20, 12))
+    f = sns.displot(df_tmp)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.savefig(diagram_path+&#34;distplot_&#34; + filename + &#34;.png&#34;)
+    plt.close()</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_precip_month"><code class="name flex">
+<span>def <span class="ident">chart_precip_month</span></span>(<span>df_tmp, filename)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>heatmap of the categorized precipitation per year-month</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_precip_month(df_tmp, filename):
+    &#34;&#34;&#34;heatmap of the categorized precipitation per year-month&#34;&#34;&#34;
+#    df_tmp.reset_index(drop=False, inplace=True)
+    df_tmp = df_tmp[df_tmp[&#39;precip_grp&#39;] != &#39;00&#39;]
+    df_precip_month \
+        = df_tmp.pivot_table(index=&#39;precip_grp&#39;, columns=&#39;month&#39;, values=&#39;yyyy_mm&#39;, aggfunc=&#39;count&#39;)
+    df_precip_month.sort_index(level=0, ascending=False, inplace=True)
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(20, 12))
+    fig1.suptitle(&#39;rain fall per month&#39;)
+    sns.heatmap(df_precip_month, ax=ax1, cmap=&#34;YlGnBu&#34;, annot=True, linewidth=1, square=True, fmt=&#39;g&#39;)
+    # ax1.set_title(&#34;Continent correlation&#34;)
+    plt.xlabel(&#39;month&#39;)
+    plt.ylabel(&#39;rain fall in mm grouped&#39;)
+    fig1.savefig(diagram_path+&#34;heatmap_&#34; + filename + &#34;.png&#34;)
+    plt.close()</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_precip_sum_to_h_yearly"><code class="name flex">
+<span>def <span class="ident">chart_precip_sum_to_h_yearly</span></span>(<span>df_tmp, df_tmp_grp)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>pairplot of precip_sum, precip_h_sum and stored_grp_min separate for each year</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_precip_sum_to_h_yearly(df_tmp, df_tmp_grp):
+    &#34;&#34;&#34;pairplot of precip_sum, precip_h_sum and stored_grp_min separate for each year&#34;&#34;&#34;
+    df_tmp_grp.reset_index(inplace=True)
+    years = df_tmp[&#39;year&#39;].unique()
+    for y in years:
+        df_grp_tmp = df_tmp_grp[df_tmp_grp[&#34;year&#34;] == y]
+        df_grp_tmp.set_index([&#39;year&#39;, &#39;month&#39;], inplace=True)
+        g1 = sns.pairplot(df_grp_tmp[[&#39;precip_sum&#39;, &#39;precip_h_sum&#39;, &#39;stored_grp_min&#39;]]
+                          , hue=&#34;stored_grp_min&#34;, diag_kind=&#39;kde&#39;, plot_kws={&#34;s&#34;: 8})
+        plt.suptitle(&#39;Year-Month precipation sum to hours&#39;)
+        g1.savefig(diagram_path+&#34;yearly/pairplot_precip_sum_h&#34; + str(y) + &#34;.png&#34;)
+        plt.close()</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_precip_sum_ym"><code class="name flex">
+<span>def <span class="ident">chart_precip_sum_ym</span></span>(<span>df_tmp)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>lineplot precip_sum per year-month</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_precip_sum_ym(df_tmp):
+    &#34;&#34;&#34;lineplot precip_sum per year-month&#34;&#34;&#34;
+    import datetime
+    # Create figure and plot space
+    df_tmp.reset_index(inplace=True)
+    df_tmp = df_tmp[df_tmp[&#39;year&#39;] &gt;= datetime.datetime.today().year -7]
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(15, 8))
+    fig1.suptitle(&#39;Year-Month charts&#39;)
+    sns.set(style=&#34;darkgrid&#34;
+            , rc={&#34;lines.linewidth&#34;: 1, &#34;legend.fontsize&#34;: 8, &#34;legend.loc&#34;: &#39;upper center&#39;})
+    sns.lineplot(data=df_tmp, sort=False,
+                 x=&#39;month&#39;, y=&#34;precip_sum&#34;,
+                 hue=&#34;year&#34;,
+                 # size=&#34;precip_sum&#34;,
+                 legend=&#39;full&#39;, palette=&#39;Paired&#39;, markers=True,
+                 )
+    ax1.set(xticks=df.month.values)
+    ax1.set_xlabel(&#34;Year-Month&#34;)
+    ax1.set_ylabel(&#34;recipation in mm&#34;, labelpad=10)
+    ax1.set_title(&#34;Year-Month precipation sum&#34;)
+    fig1.savefig(diagram_path+&#34;lineplot_ym_precip_sum.png&#34;)
+    plt.close()</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_precip_sum_yw"><code class="name flex">
+<span>def <span class="ident">chart_precip_sum_yw</span></span>(<span>df_tmp)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>lineplot precip_sum per year-week</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_precip_sum_yw(df_tmp):
+    &#34;&#34;&#34;lineplot precip_sum per year-week&#34;&#34;&#34;
+    import datetime
+    # Create figure and plot space
+#    df_tmp.reset_index(inplace=True)
+    df_tmp = df_tmp[df_tmp[&#39;year&#39;] &gt;= datetime.datetime.today().year -7]
+    df_tmp_grp = df_tmp.groupby([&#39;year&#39;,&#39;week&#39;], as_index=True, sort=True) \
+        .agg(precip_sum=(&#34;precip&#34;, &#34;sum&#34;)
+             , precip_std=(&#34;precip&#34;, np.std)
+             )
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(15, 8))
+    fig1.suptitle(&#39;Year-Week charts&#39;)
+    sns.set(style=&#34;darkgrid&#34;
+            , rc={&#34;lines.linewidth&#34;: 1, &#34;legend.fontsize&#34;: 8, &#34;legend.loc&#34;: &#39;upper center&#39;})
+    sns.lineplot(data=df_tmp_grp, sort=False,
+                 x=&#39;week&#39;, y=&#34;precip_sum&#34;,
+                 hue=&#34;year&#34;,
+                 # size=&#34;precip_std&#34;, #style=&#34;precip_std&#34;,
+                 legend=&#39;full&#39;, palette=&#39;Paired&#39;, markers=True,
+                 )
+    ax1.set(xticks=df.week.values)
+    ax1.set_xlabel(&#34;Year-week&#34;)
+    ax1.set_ylabel(&#34;recipation in mm&#34;, labelpad=10)
+    ax1.set_title(&#34;Year-week precipation sum&#34;)
+    fig1.savefig(diagram_path+&#34;lineplot_yw_precip_sum.png&#34;)
+    plt.close()</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_windrose"><code class="name flex">
+<span>def <span class="ident">chart_windrose</span></span>(<span>df_tmp)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>wind rose with wind speed and direction</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_windrose(df_tmp):
+    &#34;&#34;&#34;wind rose with wind speed and direction&#34;&#34;&#34;
+    from windrose import WindroseAxes
+
+    df_wind = df_tmp[[&#39;wdir&#39;,&#39;wspd&#39;]]
+    fig3 = plt.figure(figsize=(7, 7), dpi=80, facecolor=&#39;w&#39;, edgecolor=&#39;w&#39;)
+    rect = [0.15, 0.15, 0.7, 0.7]
+    ax3 = WindroseAxes(fig3, rect)
+    fig3.add_axes(ax3)
+    ax3.bar(df_wind[&#34;wdir&#34;], df_wind[&#34;wspd&#34;], normed=True, opening=1)
+    ax3.set_title(&#39;wind direction with speed&#39;)
+    plt.savefig(diagram_path+&#34;windrose_wdir&#34; + &#34;&#34; + &#34;.png&#34;)
+    plt.close()</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_windrose_yearly"><code class="name flex">
+<span>def <span class="ident">chart_windrose_yearly</span></span>(<span>df_tmp)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>wind rose with wind speed and direction separate for each year</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_windrose_yearly(df_tmp):
+    &#34;&#34;&#34;wind rose with wind speed and direction separate for each year&#34;&#34;&#34;
+    from windrose import WindroseAxes
+
+    # Create figure and plot space
+#    df_tmp.reset_index(inplace=True)
+    years = df_tmp[&#39;year&#39;].unique()
+    for y in years:
+        df_wind = df_tmp[df_tmp[&#34;year&#34;] == y]
+        df_wind = df_wind[[&#39;wdir&#39;, &#39;wspd&#39;]]
+        fig3 = plt.figure(figsize=(7, 7), dpi=80, facecolor=&#39;w&#39;, edgecolor=&#39;w&#39;)
+        rect = [0.15, 0.15, 0.7, 0.7]
+        ax3 = WindroseAxes(fig3, rect)
+        fig3.add_axes(ax3)
+        ax3.bar(df_wind[&#34;wdir&#34;], df_wind[&#34;wspd&#34;], normed=True, opening=1)
+        ax3.set_title(&#39;wind direction with speed for year &#39; +str(y))
+        plt.savefig(diagram_path+&#34;yearly/windrose_wdir&#34; + str(y) + &#34;.png&#34;)
+        plt.close()</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_wspd_wdir"><code class="name flex">
+<span>def <span class="ident">chart_wspd_wdir</span></span>(<span>df_tmp, filename)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>wind speed vs wind direction chart total</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_wspd_wdir(df_tmp, filename):
+    &#34;&#34;&#34;wind speed vs wind direction chart total&#34;&#34;&#34;
+    df_tmp.reset_index(drop=False, inplace=True)
+    df_wdir_wspd \
+        = df_tmp.pivot_table(index=&#39;wspd_5&#39;, columns=&#39;wdir_10&#39;, values=&#39;yyyy_mm&#39;, aggfunc=&#39;count&#39;)
+    df_wdir_wspd.sort_index(level=0, ascending=False, inplace=True)
+
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(20, 12))
+    fig1.suptitle(&#39;Wind data wind direction to wind speed&#39;)
+
+    sns.heatmap(df_wdir_wspd, ax=ax1, cmap=&#34;YlGnBu&#34;, annot=True, linewidth=1, square=True, fmt=&#39;g&#39;)
+    # ax1.set_title(&#34;Continent correlation&#34;)
+    plt.xlabel(&#39;wind direction °&#39;)
+    plt.ylabel(&#39;wind speed kph&#39;)
+    fig1.savefig(diagram_path+&#34;heatmap_&#34; + filename + &#34;.png&#34;)
+    plt.close()</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_wspd_wdir_monthly"><code class="name flex">
+<span>def <span class="ident">chart_wspd_wdir_monthly</span></span>(<span>df_tmp, filename)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>wind speed vs wind direction chart per month</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_wspd_wdir_monthly(df_tmp, filename):
+    &#34;&#34;&#34;wind speed vs wind direction chart per month&#34;&#34;&#34;
+    df_tmp.reset_index(drop=False, inplace=True)
+    for m in range(1, 12):
+        df_tmp_month = df_tmp[df_tmp[&#34;month&#34;] == m]
+        df_wdir_wspd \
+            = df_tmp_month.pivot_table(index=&#39;wspd_5&#39;, columns=&#39;wdir_10&#39;, values=&#39;yyyy_mm&#39;, aggfunc=&#39;count&#39;)
+        df_wdir_wspd.sort_index(level=0, ascending=False, inplace=True)
+
+        fig1, (ax1) = plt.subplots(1, 1, figsize=(20, 12))
+        fig1.suptitle(&#39;Wind data wind direction to wind speed for month &#39;+str(m))
+        sns.heatmap(df_wdir_wspd, ax=ax1, cmap=&#34;YlGnBu&#34;, annot=True, linewidth=1, square=True, fmt=&#39;g&#39;)
+        # ax1.set_title(&#34;Continent correlation&#34;)
+        plt.xlabel(&#39;wind direction °&#39;)
+        plt.ylabel(&#39;wind speed kph&#39;)
+        fig1.savefig(diagram_path+&#34;monthly/heatmap_&#34; +filename+ &#34;_&#34; +str(m)+ &#34;.png&#34;)
+        plt.close()
+        del df_tmp_month
+        del df_wdir_wspd</code></pre>
+</details>
+</dd>
+<dt id="yenikas_weather.scripts.draw_charts.chart_ym_heatmap"><code class="name flex">
+<span>def <span class="ident">chart_ym_heatmap</span></span>(<span>df_tmp, fields, filename, title, xlabel, ylabel, cmap)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>heatmap chart that shows the 3 entered fields
+please enter a dataFrame with exactly 3 fields</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_ym_heatmap(df_tmp, fields, filename, title, xlabel, ylabel, cmap):
+    &#34;&#34;&#34;heatmap chart that shows the 3 entered fields
+            please enter a dataFrame with exactly 3 fields&#34;&#34;&#34;
+    # df_tmp.reset_index(drop=False, inplace=True)
+    df_pivot = df_tmp.pivot(fields[0], fields[1], fields[2])
+    fig2, (ax2) = plt.subplots(1, 1, figsize=(20, 12))
+    fig2.suptitle(title)
+    sns.heatmap(df_pivot, ax=ax2, cmap=cmap, annot=True, fmt=&#39;g&#39;)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    fig2.savefig(diagram_path+&#34;heatmap_&#34; + filename + &#34;.png&#34;)
+    plt.close()
+    del df_pivot</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="yenikas_weather.scripts" href="index.html">yenikas_weather.scripts</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="yenikas_weather.scripts.draw_charts.config" href="#yenikas_weather.scripts.draw_charts.config">config</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_df_totals" href="#yenikas_weather.scripts.draw_charts.chart_df_totals">chart_df_totals</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_freq" href="#yenikas_weather.scripts.draw_charts.chart_freq">chart_freq</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_precip_month" href="#yenikas_weather.scripts.draw_charts.chart_precip_month">chart_precip_month</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_precip_sum_to_h_yearly" href="#yenikas_weather.scripts.draw_charts.chart_precip_sum_to_h_yearly">chart_precip_sum_to_h_yearly</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_precip_sum_ym" href="#yenikas_weather.scripts.draw_charts.chart_precip_sum_ym">chart_precip_sum_ym</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_precip_sum_yw" href="#yenikas_weather.scripts.draw_charts.chart_precip_sum_yw">chart_precip_sum_yw</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_windrose" href="#yenikas_weather.scripts.draw_charts.chart_windrose">chart_windrose</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_windrose_yearly" href="#yenikas_weather.scripts.draw_charts.chart_windrose_yearly">chart_windrose_yearly</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_wspd_wdir" href="#yenikas_weather.scripts.draw_charts.chart_wspd_wdir">chart_wspd_wdir</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_wspd_wdir_monthly" href="#yenikas_weather.scripts.draw_charts.chart_wspd_wdir_monthly">chart_wspd_wdir_monthly</a></code></li>
+<li><code><a title="yenikas_weather.scripts.draw_charts.chart_ym_heatmap" href="#yenikas_weather.scripts.draw_charts.chart_ym_heatmap">chart_ym_heatmap</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>
