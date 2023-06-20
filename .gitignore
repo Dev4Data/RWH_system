@@ -3,7 +3,7 @@ key.ini
 __pycache__
 /scripts/__pycache__
 .idea
-/data
+/data/*
 /diagrams
 /_backup
 /venv
