@@ -21,8 +21,6 @@ return:
 """
 import pandas as pd
 import numpy as np
-import os
-from pathlib import Path
 
 from yenikas_weather.scripts import setup_environment as env
 
@@ -33,7 +31,8 @@ env.set_pd_environments()
 config = env.get_config()
 
 
-def load_csv(show_data_overview=False):
+def load_csv(show_data_overview: bool = False) \
+        -> pd.DataFrame:
     """method that load, wrangle and enrich data from weather csv
             datetime data is split in different fields and wrangled
             precipitation data is enriched
@@ -47,7 +46,7 @@ def load_csv(show_data_overview=False):
     """
     PROJECT_ROOT = env.get_project_root()
     file_path = "{}/{}".format(PROJECT_ROOT, config['files']['weatherFile'])
-    df_tmp = pd.read_csv(file_path)
+    df_tmp: pd.DataFrame = pd.read_csv(file_path)
 
     """wrangle and clean data"""
     df_tmp['date'] = df_tmp['date'].astype({'date': 'datetime64[ns]'})
@@ -59,28 +58,30 @@ def load_csv(show_data_overview=False):
     df_tmp = df_tmp[df_tmp['datetimeStr'] < config['weather']['date_till']]
 
     # add some data
-    df_tmp['year'] = df_tmp['date'].dt.year
-    df_tmp['month'] = df_tmp['date'].dt.month
-    df_tmp['day'] = df_tmp['date'].dt.day
-    df_tmp['week'] = df_tmp['date'].dt.week
+    df_tmp['year'] = df_tmp['date'].dt.year.astype(np.int64)
+    df_tmp['month'] = df_tmp['date'].dt.month.astype(np.int64)
+    df_tmp['day'] = df_tmp['date'].dt.day.astype(np.int64)
+    df_tmp['week'] = df_tmp['date'].dt.isocalendar().week.astype(np.int64)
     df_tmp['yyyy_mm'] = df_tmp['date'].dt.strftime('%Y-%m')
     #    dayOfWeek = {0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}
     #    df_tmp['weekday'] = df_tmp['date'].dt.dayofweek.map(dayOfWeek)
     df_tmp['rain_season'] = ""
 
-    df_tmp['precip_h'] = df_tmp['precipcover'] / 100 * 24
-    df_tmp['precip_mm_h'] = df_tmp['precip'] / df_tmp['precip_h']
+    df_tmp['precip'] = df_tmp['precip'].astype(float)
+    df_tmp['precip_h'] = (df_tmp['precipcover'] / 100.0 * 24.0).astype(float)
+    df_tmp['precip_h'] = df_tmp['precip_h'].astype(float)
+    df_tmp['precip_mm_h'] = (df_tmp['precip'] / df_tmp['precip_h']).astype(float)
     df_tmp['precip_mm_h'] = df_tmp['precip_mm_h'].fillna(0)
     df_tmp['precip_7d'] \
         = df_tmp['precip'].shift(1) \
-         + df_tmp['precip'].shift(2) \
-         + df_tmp['precip'].shift(3) \
-         + df_tmp['precip'].shift(4) \
-         + df_tmp['precip'].shift(5) \
-         + df_tmp['precip'].shift(6) \
-         + df_tmp['precip'].shift(7)
-    df_tmp['dry_day'] = df_tmp['precip'].apply(lambda x: 1 if x == 0 else 0).fillna(0)
-    df_tmp['wet_day'] = df_tmp['precip'].apply(lambda x: 1 if x > 0 else 0).fillna(0)
+        + df_tmp['precip'].shift(2) \
+        + df_tmp['precip'].shift(3) \
+        + df_tmp['precip'].shift(4) \
+        + df_tmp['precip'].shift(5) \
+        + df_tmp['precip'].shift(6) \
+        + df_tmp['precip'].shift(7)
+    df_tmp['dry_day'] = df_tmp['precip'].apply(lambda x: 1 if x == 0 else 0).fillna(0).astype(np.int64)
+    df_tmp['wet_day'] = df_tmp['precip'].apply(lambda x: 1 if x > 0 else 0).fillna(0).astype(np.int64)
     df_tmp['precip_grp'] = df_tmp['precip']. \
         apply(lambda x: '00' if x == 0.0 \
             else ('00-02' if 0.0 < x <= 2.0
@@ -94,18 +95,18 @@ def load_csv(show_data_overview=False):
                   )
               )
 
-    df_tmp['wdir'] = df_tmp['wdir'].fillna(0).round(0).astype(int)
+    df_tmp['wdir'] = df_tmp['wdir'].fillna(0).round(0).astype(np.int64)
 
-    df_tmp['precip_25'] = df_tmp['precip'] / 25
-    df_tmp['precip_25'] = df_tmp['precip_25'].fillna(0).round(0).astype(int) * 25
-    df_tmp['maxt_5'] = df_tmp['maxt'] / 5
-    df_tmp['maxt_5'] = df_tmp['maxt_5'].fillna(0).round(0).astype(int) * 5
-    df_tmp['wdir_10'] = df_tmp['wdir'] / 10
-    df_tmp['wdir_10'] = df_tmp['wdir_10'].fillna(0).round(0).astype(int) * 10
-    df_tmp['wspd_5'] = df_tmp['wspd'] / 5
-    df_tmp['wspd_5'] = df_tmp['wspd_5'].fillna(0).round(0).astype(int) * 5
-    df_tmp['humidity_20'] = df_tmp['humidity'] / 20
-    df_tmp['humidity_20'] = df_tmp['humidity_20'].fillna(0).round(0).astype(int) * 20
+    df_tmp['precip_25'] = (df_tmp['precip'] / 25).astype(float)
+    df_tmp['precip_25'] = df_tmp['precip_25'].fillna(0.0).round(0).astype(np.int64) * 25
+    df_tmp['maxt_5'] = (df_tmp['maxt'] / 5).astype(float)
+    df_tmp['maxt_5'] = df_tmp['maxt_5'].fillna(0.0).round(0).astype(np.int64) * 5
+    df_tmp['wdir_10'] = (df_tmp['wdir'] / 10).astype(float)
+    df_tmp['wdir_10'] = df_tmp['wdir_10'].fillna(0.0).round(0).astype(np.int64) * 10
+    df_tmp['wspd_5'] = (df_tmp['wspd'] / 5).astype(float)
+    df_tmp['wspd_5'] = df_tmp['wspd_5'].fillna(0.0).round(0).astype(np.int64) * 5
+    df_tmp['humidity_20'] = (df_tmp['humidity'] / 20).astype(float)
+    df_tmp['humidity_20'] = df_tmp['humidity_20'].fillna(0.0).round(0).astype(np.int64) * 20
 
     df_tmp.drop('snow', axis=1, inplace=True)
     df_tmp.drop('snowdepth', axis=1, inplace=True)
@@ -126,29 +127,30 @@ def load_csv(show_data_overview=False):
     return df_tmp
 
 
-def init_rwh_data(rwh_data):
+def init_rwh_data(rwh_data: pd.DataFrame) -> pd.DataFrame:
     """initialise empty fileds for RWH calculations"""
-    rwh_data['collected'] = 0.0
-    rwh_data['net_collected_day'] = 0.0
-    rwh_data['person_consume'] = 0.0
-    rwh_data['garden_consume'] = 0.0
-    rwh_data['water_income'] = 0.0
-    rwh_data['stored'] = 0.0
-    rwh_data['overrun'] = 0.0
-    rwh_data['net_overrun'] = 0.0
-    rwh_data['tank_overrun'] = 0.0
+    rwh_data['collected'] = float(0.0)
+    rwh_data['net_collected_day'] = float(0.0)
+    rwh_data['person_consume'] = float(0.0)
+    rwh_data['garden_consume'] = float(0.0)
+    rwh_data['water_income'] = float(0.0)
+    rwh_data['stored'] = float(0.0)
+    rwh_data['overrun'] = float(0.0)
+    rwh_data['net_overrun'] = float(0.0)
+    rwh_data['tank_overrun'] = float(0.0)
     return rwh_data
 
 
-def calc_rwh_collection\
-    ( df_tmp
-      , roof_name
-      , max_pipe_throughput
-      , max_filter_throughput
-      , effective_collection_area
-      , rain_buffer_volume
-      , show_data_overview=False
-      ):
+def calc_rwh_collection(
+    df_tmp: pd.DataFrame
+    , roof_name: str
+    , max_pipe_throughput: float
+    , max_filter_throughput: float
+    , effective_collection_area: float
+    , rain_buffer_volume: float
+    , show_data_overview: bool = False
+    )\
+        -> [pd.DataFrame, pd.DataFrame]:
     """method to calculate the performance of a RWH component
             calculates the collected water and the water that overruns from gutter or filter
             The overrun from the storage is calculated in the calc_rwh_system method.
@@ -166,59 +168,60 @@ def calc_rwh_collection\
             a enriched dataset with the collected water and also show when the system couldnt manage the volume of rain
     """
     # check throughputs
-    if effective_collection_area > 0:
-        df_tmp[roof_name+'collected_h'] = effective_collection_area * df_tmp['precip_mm_h'].fillna(0)
-        df_tmp[roof_name+'collected_min'] = df_tmp[roof_name+'collected_h'].fillna(0)/60
-        df_tmp[roof_name+'collected_day'] = effective_collection_area * df_tmp['precip'].fillna(0)
+    if effective_collection_area > 0.0:
+        df_tmp[roof_name+'collected_h'] = effective_collection_area * df_tmp['precip_mm_h'].fillna(0.0)
+        df_tmp[roof_name+'collected_min'] = df_tmp[roof_name+'collected_h'].fillna(0.0)/60
+        df_tmp[roof_name+'collected_day'] = effective_collection_area * df_tmp['precip'].fillna(0.0)
         df_tmp[roof_name + 'net_collected_day'] = df_tmp[roof_name+'collected_day']
 
     # check storage capacity
-    df_tmp[roof_name+'net_gutter_collected_day'] = df_tmp[roof_name+'collected_day'].fillna(0)
+    df_tmp[roof_name+'net_gutter_collected_day'] = df_tmp[roof_name+'collected_day'].fillna(0.0)
     pipe_rush_yn = df_tmp['datetimeStr'] = df_tmp['datetimeStr']
-    if max_pipe_throughput > 0:
+    if max_pipe_throughput > 0.0:
         # if the rain is to strong some water cant be collected
         df_tmp[roof_name+'pipe_rush_min'] \
             = df_tmp[roof_name+'collected_min'] - max_pipe_throughput
         df_tmp[roof_name+'pipe_rush_min'] \
-            = df_tmp[roof_name+'pipe_rush_min'].apply(lambda x: x if x > 0 else 0).fillna(0)
+            = df_tmp[roof_name+'pipe_rush_min'].apply(lambda x: x if x > 0.0 else 0.0).fillna(0.0)
         df_tmp[roof_name+'pipe_rush_day'] \
-            = df_tmp[roof_name+'pipe_rush_min'] * 60 * df_tmp['precip_h'].fillna(0)
+            = df_tmp[roof_name+'pipe_rush_min'] * 60 * df_tmp['precip_h'].fillna(0.0)
         df_tmp[roof_name+'net_gutter_collected_day'] \
             = df_tmp[roof_name+'net_gutter_collected_day']\
-                - df_tmp[roof_name+'pipe_rush_min'] * 60 * df_tmp['precip_h'].fillna(0)
+                - df_tmp[roof_name+'pipe_rush_min'] * 60 * df_tmp['precip_h'].fillna(0.0)
         df_tmp[roof_name + 'net_collected_day'] = df_tmp[roof_name+'net_gutter_collected_day']
         df_tmp[roof_name + 'net_overrun'] = df_tmp[roof_name+'pipe_rush_day']
 
-        df_tmp[roof_name+'pipe_rush_day'] = df_tmp[roof_name+'pipe_rush_day'].round(0).astype(int)
-        df_tmp[roof_name+'net_gutter_collected_day'] = df_tmp[roof_name+'net_gutter_collected_day'].round(0).astype(int)
+        df_tmp[roof_name+'pipe_rush_day'] = df_tmp[roof_name+'pipe_rush_day'].round(0).astype(np.int64)
+        df_tmp[roof_name+'net_gutter_collected_day'] \
+            = df_tmp[roof_name+'net_gutter_collected_day'].round(0).astype(np.int64)
 
         df_tmp.drop(roof_name + 'pipe_rush_min', axis=1, inplace=True)
 
         print(roof_name+" # of days the gutter overrun = " + str(len(df_tmp[df_tmp[roof_name+'pipe_rush_day'] > 0])))
-        pipe_rush_yn = df_tmp[roof_name+'pipe_rush_day'] > 0
+        pipe_rush_yn = df_tmp[roof_name+'pipe_rush_day'] > 0.0
 
     filter_rush_yn = df_tmp['datetimeStr'] = df_tmp['datetimeStr']
-    if max_filter_throughput > 0\
-    and rain_buffer_volume > 0:
+    if max_filter_throughput > 0.0\
+    and rain_buffer_volume > 0.0:
         df_tmp[roof_name+'storm_tank_fill_h'] \
             = rain_buffer_volume / df_tmp[roof_name+'collected_h']
         df_tmp[roof_name+'storm_tank_fill_h'] \
-            = df_tmp[roof_name+'storm_tank_fill_h'].apply(lambda x: x if x > 0 else 0).fillna(0)
+            = df_tmp[roof_name+'storm_tank_fill_h'].apply(lambda x: x if x > 0.0 else 0.0).fillna(0.0)
         df_tmp[roof_name+'collected_plus_h'] \
             = df_tmp[roof_name+'collected_h'] - max_filter_throughput*60
         df_tmp[roof_name+'collected_plus_h'] \
-            = df_tmp[roof_name+'collected_plus_h'].apply(lambda x: x if x > 0 else 0).fillna(0)
+            = df_tmp[roof_name+'collected_plus_h'].apply(lambda x: x if x > 0.0 else 0.0).fillna(0.0)
         df_tmp[roof_name+'filter_rush_day'] \
             = (df_tmp['precip_h'] - df_tmp[roof_name+'storm_tank_fill_h']) * df_tmp[roof_name+'collected_plus_h']
         df_tmp[roof_name+'filter_rush_day'] \
-            = df_tmp[roof_name+'filter_rush_day'].apply(lambda x: x if x > 0 else 0).fillna(0)
+            = df_tmp[roof_name+'filter_rush_day'].apply(lambda x: x if x > 0.0 else 0.0).fillna(0.0)
         df_tmp[roof_name+'net_rain_buffer_collected_day'] \
             = df_tmp[roof_name+'net_gutter_collected_day'] - df_tmp[roof_name+'filter_rush_day']
         df_tmp[roof_name + 'net_collected_day'] = df_tmp[roof_name+'net_rain_buffer_collected_day']
         df_tmp[roof_name + 'net_overrun'] = df_tmp[roof_name+'filter_rush_day']
 
-        df_tmp[roof_name+'filter_rush_day'] = df_tmp[roof_name+'filter_rush_day'].round(0).astype(int)
-        df_tmp[roof_name+'net_rain_buffer_collected_day'] = df_tmp[roof_name+'net_rain_buffer_collected_day'].round(0).astype(int)
+        df_tmp[roof_name+'filter_rush_day'] = df_tmp[roof_name+'filter_rush_day'].round(0).astype(np.int64)
+        df_tmp[roof_name+'net_rain_buffer_collected_day'] = df_tmp[roof_name+'net_rain_buffer_collected_day'].round(0).astype(np.int64)
 
         df_tmp.drop(roof_name + 'collected_plus_h', axis=1, inplace=True)
 
@@ -228,9 +231,9 @@ def calc_rwh_collection\
     df_tmp['collected'] = df_tmp['collected'] + df_tmp[roof_name + 'collected_day']
     df_tmp['net_collected_day'] = df_tmp['net_collected_day'] + df_tmp[roof_name + 'net_collected_day']
     df_tmp['net_overrun'] = df_tmp['net_overrun'] + df_tmp[roof_name + 'net_overrun']
-    df_tmp['collected'] = df_tmp['collected'].round(0).astype(int)
-    df_tmp['net_collected_day'] = df_tmp['net_collected_day'].round(0).astype(int)
-    df_tmp['net_overrun'] = df_tmp['net_overrun'].round(0).astype(int)
+    df_tmp['collected'] = df_tmp['collected'].round(0).astype(np.int64)
+    df_tmp['net_collected_day'] = df_tmp['net_collected_day'].round(0).astype(np.int64)
+    df_tmp['net_overrun'] = df_tmp['net_overrun'].round(0).astype(np.int64)
 
     storm_yn = np.logical_or(pipe_rush_yn, filter_rush_yn)  # filter overrun
 
@@ -242,15 +245,16 @@ def calc_rwh_collection\
     return df_tmp, storm_yn
 
 
-def calc_rwh_system \
-    (rwh_data
-     , avg_consumer_no
-     , consume
-     , garden_usage
-     , storage_volume
-     , tank_reserves
-     , show_data_overview=False
-     ):
+def calc_rwh_system(
+    rwh_data: pd.DataFrame
+    , avg_consumer_no: float
+    , consume: float
+    , garden_usage: float
+    , storage_volume: float
+    , tank_reserves: float
+    , show_data_overview: bool = False
+    )\
+        -> [pd.DataFrame, pd.DataFrame]:
     """method to calculate scenario data for rain water harvesting components
             It calculates the fill state of the storage at a particular date
             And how much water overrun because the storages are full
@@ -295,17 +299,17 @@ def calc_rwh_system \
             rwh_data.at[index, 'rain_season'] = "rs" + str(row['year'])
 
     # round values
-    rwh_data.loc[:, ('person_consume')] = rwh_data['person_consume'].round(0).astype(int)
-    rwh_data.loc[:, ('garden_consume')] = rwh_data['garden_consume'].round(0).astype(int)
-    rwh_data.loc[:, ('water_income')] = rwh_data['water_income'].round(0).astype(int)
-    rwh_data.loc[:, ('stored')] = rwh_data['stored'].round(0).astype(int)
-    rwh_data.loc[:, ('tank_overrun')] = rwh_data['tank_overrun'].round(0).astype(int)
+    rwh_data['person_consume'] = rwh_data['person_consume'].apply(lambda x: int(round(x, 0)))
+    rwh_data['garden_consume'] = rwh_data['garden_consume'].apply(lambda x: int(round(x, 0)))
+    rwh_data['water_income'] = rwh_data['water_income'].apply(lambda x: int(round(x, 0)))
+    rwh_data['stored'] = rwh_data['stored'].apply(lambda x: int(round(x, 0)))
+    rwh_data['tank_overrun'] = rwh_data['tank_overrun'].apply(lambda x: int(round(x, 0)))
 
     rwh_data['overrun'] = rwh_data['net_overrun'] + rwh_data['tank_overrun']
     tank_overrun_yn = rwh_data['tank_overrun'] > 0
     print(" # of days the tank overrun = " + str(len(rwh_data[rwh_data['tank_overrun'] > 0])))
 
-    rwh_data['store_filled_pct'] = rwh_data['stored'] / storage_volume
+    rwh_data['store_filled_pct'] = (rwh_data['stored'] / storage_volume).astype(float)
     rwh_data['store_filled_grp'] = rwh_data['store_filled_pct']. \
         apply(lambda x: '00' if x == 0.0 \
             else ('01-10' if 0.0 < x <= 0.1
@@ -327,7 +331,8 @@ def calc_rwh_system \
     return rwh_data, tank_overrun_yn
 
 
-def group_rwh_data_ym(df, group_fields, show_data_overview=False):
+def group_rwh_data_ym(df_in: pd.DataFrame, group_fields: list, show_data_overview: bool = False) \
+        -> [pd.DataFrame, pd.DataFrame]:
     """method to group the RWH dataset by defined fields
             It calculates some aggregates and other statistical data
 
@@ -338,10 +343,7 @@ def group_rwh_data_ym(df, group_fields, show_data_overview=False):
         return:
             a grouped dataset with statistical data
     """
-    def quantile(x, n):
-        return x.quantile(n)
-
-    df_tmp = df.groupby(group_fields, as_index=True, sort=False) \
+    df_tmp = df_in.groupby(group_fields, as_index=True, sort=False) \
         .agg(yyyy_mm=("yyyy_mm", "min")
              , days=("yyyy_mm", "count")
              , precip_sum=("precip", "sum")
@@ -411,24 +413,25 @@ def group_rwh_data_ym(df, group_fields, show_data_overview=False):
     df_tmp['wspd_avg'] = df_tmp['wspd_avg'].round(1)
     df_tmp['wgust_avg'] = df_tmp['wgust_avg'].round(1)
 
-    df_desc = pd.DataFrame({'precip': df['precip'].describe()
-                               , 'precip_h': df['precip_h'].describe()
-                               , 'precip_mm_h': df['precip_mm_h'].describe()
-                               , 'humidity': df['humidity'].describe()
-                               , 'precipcover': df['precipcover'].describe()
-                               , 'cloudcover': df['cloudcover'].describe()
-                               , 'temp': df['temp'].describe()
-                               , 'maxt': df['maxt'].describe()
-                               , 'wspd': df['wspd'].describe()
-                               , 'wgust': df['wgust'].describe()
-                               , 'windchill': df['windchill'].describe()})
-    df_desc.loc['05%'] = df.quantile(0.05).round(1)
-    df_desc.loc['95%'] = df.quantile(0.95).round(1)
-    df_desc.loc['97,5%'] = df.quantile(0.975).round(1)
-    df_desc.loc['99%'] = df.quantile(0.99).round(1)
-    df_desc.loc['dtype'] = df_desc.dtypes
-    df_desc.loc['% count'] = df.isnull().mean().round(4)
+    df_desc = pd.DataFrame({'precip': df_in['precip'].describe().astype(float)
+                               , 'precip_h': df_in['precip_h'].describe().astype(float)
+                               , 'precip_mm_h': df_in['precip_mm_h'].describe().astype(float)
+                               , 'humidity': df_in['humidity'].describe().astype(float)
+                               , 'precipcover': df_in['precipcover'].describe().astype(float)
+                               , 'cloudcover': df_in['cloudcover'].describe().astype(float)
+                               , 'temp': df_in['temp'].describe().astype(float)
+                               , 'maxt': df_in['maxt'].describe().astype(float)
+                               , 'wspd': df_in['wspd'].describe().astype(float)
+                               , 'wgust': df_in['wgust'].describe().astype(float)
+                               , 'windchill': df_in['windchill'].describe().astype(float)})
     df_desc = df_desc.reset_index()
+    # TODO: RuntimeWarning in subtract
+    df_desc.loc['05%'] = (df_in.quantile(0.05, numeric_only=True).round(1)).astype(float)
+    df_desc.loc['95%'] = (df_in.quantile(0.95, numeric_only=True).round(1)).astype(float)
+    df_desc.loc['97,5%'] = (df_in.quantile(0.975, numeric_only=True).round(1)).astype(float)
+    df_desc.loc['99%'] = (df_in.quantile(0.99, numeric_only=True).round(1)).astype(float)
+    df_desc.loc['dtype'] = df_desc.dtypes
+    df_desc.loc['% count'] = df_in.isnull().mean().round(4).astype(float)
     if show_data_overview:
         print(df_tmp.info())
         print(df_tmp.head(60))
@@ -437,54 +440,59 @@ def group_rwh_data_ym(df, group_fields, show_data_overview=False):
     return df_tmp, df_desc
 
 
-def main():
+def main() \
+        -> [pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """main method to order the method calls and fill the parameters from the config file"""
-    df = load_csv(False)
+    df: pd.DataFrame = load_csv(False)
     df = init_rwh_data(df)
 
     # default RWH parameters
     df, df_storm_gr\
         = calc_rwh_collection\
             (df, config['rwh']['r1_name']
-            , eval(config['rwh']['r1_max_pipe_throughput'])
-            , eval(config['rwh']['r1_max_filter_throughput'])
-            , eval(config['rwh']['r1_effective_collection_area'])
-            , eval(config['rwh']['r1_rain_buffer_volume'])
+            , float(eval(config['rwh']['r1_max_pipe_throughput']))
+            , float(eval(config['rwh']['r1_max_filter_throughput']))
+            , float(eval(config['rwh']['r1_effective_collection_area']))
+            , float(eval(config['rwh']['r1_rain_buffer_volume']))
             , False
             )
     df, df_storm_mr\
         = calc_rwh_collection\
             (df, config['rwh']['r2_name']
-            , eval(config['rwh']['r2_max_pipe_throughput'])
-            , eval(config['rwh']['r2_max_filter_throughput'])
-            , eval(config['rwh']['r2_effective_collection_area'])
-            , eval(config['rwh']['r2_rain_buffer_volume'])
+            , float(eval(config['rwh']['r2_max_pipe_throughput']))
+            , float(eval(config['rwh']['r2_max_filter_throughput']))
+            , float(eval(config['rwh']['r2_effective_collection_area']))
+            , float(eval(config['rwh']['r2_rain_buffer_volume']))
             , False
             )
     df, df_tank\
         = calc_rwh_system(df  # rwh_data
-                         , eval(config['rwh']['avg_consumer_no'])
-                         , eval(config['rwh']['person_consume'])
-                         , eval(config['rwh']['garden_usage'])
-                         , eval(config['rwh']['storage_volume'])
-                         , eval(config['rwh']['tank_reserves'])
-                         , True  # show_data_overview
+                         , float(eval(config['rwh']['avg_consumer_no']))
+                         , float(eval(config['rwh']['person_consume']))
+                         , float(eval(config['rwh']['garden_usage']))
+                         , float(eval(config['rwh']['storage_volume']))
+                         , float(eval(config['rwh']['tank_reserves']))
+                         , False  # show_data_overview
                          )
-    print(df[np.logical_or(np.logical_or(df_storm_gr, df_storm_mr), df_tank)].head(30))
+    print("Example RWH data")
+    print(df[np.logical_or(np.logical_or(df_storm_gr, df_storm_mr), df_tank)].tail(10).transpose())
+    print()
     del df_storm_gr
     del df_storm_mr
     del df_tank
 
-
     df_ym, df_total = group_rwh_data_ym(df, ['year', 'month'], False)
     df_y, df_total_y = group_rwh_data_ym(df, ['year'], False)
-    print("Summary of Totals")
+    print("Description of all numeric values")
     print(df_total)
-    print(df_total_y)
-    print(df_y)
+    print()
+    print("Summary of Figures per Yearly")
+    print(df_y.tail(10).transpose())
+    # print(df_y.info())
 
     return df, df_total, df_ym, df_y
 
 
 """Main run section"""
-main()
+if __name__ == '__main__':
+    main()

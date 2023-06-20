@@ -39,4 +39,5 @@ def set_pd_environments():
     pd.set_option('max_seq_item', eval(config.get('DEFAULT', 'displayMaxSeqItem', fallback=None)))
     pd.set_option('display.width', int(config['DEFAULT']['displayWidth']))
     pd.set_option('display.max_columns', eval(config.get('DEFAULT', 'displayMaxColumns', fallback=None)))
+    pd.set_option('display.max_rows', eval(config.get('DEFAULT', 'displayMaxRows', fallback=None)))
 

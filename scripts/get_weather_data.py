@@ -15,10 +15,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import requests
-from random import randint
 import csv
-import json
-import os
 
 from yenikas_weather.scripts import setup_environment as env
 
@@ -182,7 +179,8 @@ def get_new_weather_data(
                     #print(df_json.info())
                     #print(df_json.head())
                     df_snapshot = df_json[['location','date','address','wdir','maxt','conditions']].head(1)
-                    df_snapshot.append(df[['location','date','address','wdir','maxt','conditions']].tail(1))
+                    # df_snapshot.append(df[['location','date','address','wdir','maxt','conditions']].tail(1))
+                    pd.concat([df_snapshot, df[['location','date','address','wdir','maxt','conditions']]]).tail(1)
                     print("weatherdata # added {}".format(df.shape[0]))
                 #    print(df_snapshot)
                     filled_lines = df_json.shape[0]
@@ -221,4 +219,5 @@ def get_weather_data_run():
 
 
 """Main section"""
-get_weather_data_run()
+if __name__ == '__main__':
+    get_weather_data_run()
