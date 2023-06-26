@@ -22,7 +22,7 @@ return:
 import pandas as pd
 import numpy as np
 
-from yenikas_weather.scripts import setup_environment as env
+from yenikas_weather.src import setup_environment as env
 
 
 """Show parameters"""
@@ -31,9 +31,23 @@ env.set_pd_environments()
 config = env.get_config()
 
 
-def load_csv(show_data_overview: bool = False) \
+def load_csv() \
         -> pd.DataFrame:
-    """method that load, wrangle and enrich data from weather csv
+    """method that load data from weather csv
+        parameters:
+        return:
+            DataFrame with the data
+    """
+    PROJECT_ROOT = env.get_project_root()
+    file_path = "{}/{}".format(PROJECT_ROOT, config['files']['weatherFile'])
+    df_tmp: pd.DataFrame = pd.read_csv(file_path)
+
+    return df_tmp
+
+
+def transform_data(df_tmp: pd.DataFrame, show_data_overview: bool = False) \
+            -> pd.DataFrame:
+    """method that wrangle and enrich data from weather csv
             datetime data is split in different fields and wrangled
             precipitation data is enriched
             and some data is also categorized in ranges
@@ -44,10 +58,6 @@ def load_csv(show_data_overview: bool = False) \
         return:
             DataFrame with the data
     """
-    PROJECT_ROOT = env.get_project_root()
-    file_path = "{}/{}".format(PROJECT_ROOT, config['files']['weatherFile'])
-    df_tmp: pd.DataFrame = pd.read_csv(file_path)
-
     """wrangle and clean data"""
     df_tmp['date'] = df_tmp['date'].astype({'date': 'datetime64[ns]'})
     # df_tmp = df_tmp.set_index(['date'])
@@ -331,7 +341,9 @@ def calc_rwh_system(
     return rwh_data, tank_overrun_yn
 
 
-def group_rwh_data_ym(df_in: pd.DataFrame, group_fields: list, show_data_overview: bool = False) \
+def date_group_rwh_data(df_in: pd.DataFrame,
+                        group_fields: list,
+                        show_data_overview: bool = False) \
         -> [pd.DataFrame, pd.DataFrame]:
     """method to group the RWH dataset by defined fields
             It calculates some aggregates and other statistical data
@@ -441,9 +453,12 @@ def group_rwh_data_ym(df_in: pd.DataFrame, group_fields: list, show_data_overvie
 
 
 def main() \
-        -> [pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        -> [pd.DataFrame, pd.DataFrame,
+            pd.DataFrame, pd.DataFrame,
+            pd.DataFrame]:
     """main method to order the method calls and fill the parameters from the config file"""
-    df: pd.DataFrame = load_csv(False)
+    df: pd.DataFrame = load_csv()
+    df = transform_data(df, False)
     df = init_rwh_data(df)
 
     # default RWH parameters
@@ -481,8 +496,9 @@ def main() \
     del df_storm_mr
     del df_tank
 
-    df_ym, df_total = group_rwh_data_ym(df, ['year', 'month'], False)
-    df_y, df_total_y = group_rwh_data_ym(df, ['year'], False)
+    df_y, df_total_y = date_group_rwh_data(df, ['year'], False)
+    df_ym, df_total = date_group_rwh_data(df, ['year', 'month'], False)
+    df_yw, df_total_w = date_group_rwh_data(df, ['year', 'week'], False)
     print("Description of all numeric values")
     print(df_total)
     print()
@@ -490,7 +506,7 @@ def main() \
     print(df_y.tail(10).transpose())
     # print(df_y.info())
 
-    return df, df_total, df_ym, df_y
+    return df, df_total, df_ym, df_y, df_yw
 
 
 """Main run section"""

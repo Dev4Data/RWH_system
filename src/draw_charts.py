@@ -33,10 +33,12 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+import warnings
 
-from yenikas_weather.scripts import calc_rwh_system as rwh_system
-from yenikas_weather.scripts import setup_environment as env
+from yenikas_weather.src import calc_rwh_system as rwh_system
+from yenikas_weather.src import setup_environment as env
 
+warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 """Show parameters"""
 env.set_pd_environments()
@@ -273,7 +275,7 @@ def chart_df_totals(df_tmp_grp: pd.DataFrame):
 
 if __name__ == '__main__':
     """get the data"""
-    df, df_total, df_ym, df_y = rwh_system.main()
+    df, df_total, df_ym, df_y, df_yw = rwh_system.main()
 
     """plot data"""
     sns.set_theme()
@@ -301,7 +303,7 @@ if __name__ == '__main__':
     chart_precip_sum_yw(df)
     # chart_precip_sum_to_h(df, df_ym)
 
-    df_rsm, df_rsm_total = rwh_system.group_rwh_data_ym(df, ['rain_season', 'month'], False)
+    df_rsm, df_rsm_total = rwh_system.date_group_rwh_data(df, ['rain_season', 'month'], False)
 
     df_rsm.reset_index(drop=False, inplace=True)
     df_rsm['month'] = df_rsm['month'].astype(cat_month)
