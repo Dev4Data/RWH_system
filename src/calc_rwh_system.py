@@ -22,7 +22,7 @@ return:
 import pandas as pd
 import numpy as np
 
-from yenikas_weather.src import setup_environment as env
+from src import setup_environment as env
 
 
 """Show parameters"""

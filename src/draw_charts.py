@@ -35,8 +35,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import warnings
 
-from yenikas_weather.src import calc_rwh_system as rwh_system
-from yenikas_weather.src import setup_environment as env
+from src import calc_rwh_system as rwh_system
+from src import setup_environment as env
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 

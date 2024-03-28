@@ -17,7 +17,7 @@ import datetime
 import requests
 import csv
 
-from yenikas_weather.src import setup_environment as env
+from src import setup_environment as env
 
 
 # constants
