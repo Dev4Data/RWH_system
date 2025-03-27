@@ -145,6 +145,8 @@ def get_new_weather_data(
         json_data = get_latlon_weather_json(latlng, df_date_min, df_date_max, use_key_num)
 #        print(json_data['location'])
 
+        if not json_data:
+            raise ValueError("no data returned from weather.visualcrossing.com API")
         if "messages" in json_data:
             msg = json_data["messages"]
         elif "message" in json_data:
@@ -156,8 +158,7 @@ def get_new_weather_data(
             print("msg: {}".format(info))
             return json_data['remainingCost'], 0
 
-        if msg == None\
-        or msg == "nan":
+        if msg is None or msg == "nan":
             if "remainingCost" in json_data:
                 remaining_cost = int(json_data['remainingCost'])
                 print("remaining_cost: {}, at key: {}".format(remaining_cost, use_key_num))

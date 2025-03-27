@@ -182,7 +182,7 @@ def calc_rwh_collection(
         df_tmp[roof_name+'collected_h'] = effective_collection_area * df_tmp['precip_mm_h'].fillna(0.0)
         df_tmp[roof_name+'collected_min'] = df_tmp[roof_name+'collected_h'].fillna(0.0)/60
         df_tmp[roof_name+'collected_day'] = effective_collection_area * df_tmp['precip'].fillna(0.0)
-        df_tmp[roof_name + 'net_collected_day'] = df_tmp[roof_name+'collected_day']
+        df_tmp[roof_name+'net_collected_day'] = df_tmp[roof_name+'collected_day']
 
     # check storage capacity
     df_tmp[roof_name+'net_gutter_collected_day'] = df_tmp[roof_name+'collected_day'].fillna(0.0)
@@ -256,15 +256,14 @@ def calc_rwh_collection(
 
 
 def calc_rwh_system(
-    rwh_data: pd.DataFrame
-    , avg_consumer_no: float
-    , consume: float
-    , garden_usage: float
-    , storage_volume: float
-    , tank_reserves: float
-    , show_data_overview: bool = False
-    )\
-        -> [pd.DataFrame, pd.DataFrame]:
+    rwh_data: pd.DataFrame,
+    avg_consumer_no: float,
+    consume: float,
+    garden_usage: float,
+    storage_volume: float,
+    tank_reserves: float,
+    show_data_overview: bool = False
+) -> [pd.DataFrame, pd.DataFrame]:
     """method to calculate scenario data for rain water harvesting components
             It calculates the fill state of the storage at a particular date
             And how much water overrun because the storages are full
@@ -272,7 +271,6 @@ def calc_rwh_system(
         parameters:
             rwh_data - DataFrame with weather data and RWH component data
             avg_consumer_no => average number of persons using water (#)
-            consume => liter a persons use in average at one day (l/day)
             garden_usage => liter are used for gardening when there is less rain/humidity (l/day)
             storage_volume => size of all storage volumes in liter
             tank_reserves => how empty can be the tank before you stop watering the garden
@@ -280,6 +278,11 @@ def calc_rwh_system(
        return:
             a enriched dataset with the RWH system performance
     """
+    required_columns = ['precip_7d', 'humidity', 'net_collected_day', 'month', 'year']
+    for col in required_columns:
+        if col not in rwh_data.columns:
+            raise KeyError(f"Column '{col}' does not exist in the DataFrame.")
+
     rwh_data['person_consume'] = avg_consumer_no * consume
     stored_last = 0.0
     for index, row in rwh_data.iterrows():
@@ -437,18 +440,34 @@ def date_group_rwh_data(df_in: pd.DataFrame,
                                , 'wgust': df_in['wgust'].describe().astype(float)
                                , 'windchill': df_in['windchill'].describe().astype(float)})
     df_desc = df_desc.reset_index()
-    # TODO: RuntimeWarning in subtract
-    df_desc.loc['05%'] = (df_in.quantile(0.05, numeric_only=True).round(1)).astype(float)
-    df_desc.loc['95%'] = (df_in.quantile(0.95, numeric_only=True).round(1)).astype(float)
-    df_desc.loc['97,5%'] = (df_in.quantile(0.975, numeric_only=True).round(1)).astype(float)
-    df_desc.loc['99%'] = (df_in.quantile(0.99, numeric_only=True).round(1)).astype(float)
+
+    numeric_columns = df_in.select_dtypes(include=['float64', 'int64']).columns
+    percentiles = {
+        '05%': 0.05,
+        '95%': 0.95,
+        '97,5%': 0.975,
+        '99%': 0.99
+    }
+    for label, percentile in percentiles.items():
+        percentile_values = {}
+        for col in numeric_columns:
+            if col in df_desc.columns:
+                values = df_in[col].dropna()
+                if not values.empty:
+                    percentile_values[col] = values.quantile(percentile)
+                else:
+                    percentile_values[col] = np.nan
+        df_desc.loc[label] = pd.Series(percentile_values)
+    df_desc = df_desc.round(1)
+
     df_desc.loc['dtype'] = df_desc.dtypes
     df_desc.loc['% count'] = df_in.isnull().mean().round(4).astype(float)
+
     if show_data_overview:
         print(df_tmp.info())
         print(df_tmp.head(60))
         print(df_tmp.tail(60))
-        # print(df_tmp.describe())
+
     return df_tmp, df_desc
 
 
@@ -480,6 +499,15 @@ def main() \
             , float(eval(config['rwh']['r2_rain_buffer_volume']))
             , False
             )
+    df, df_storm_cp\
+        = calc_rwh_collection\
+            (df, config['rwh']['r3_name']
+            , float(eval(config['rwh']['r3_max_pipe_throughput']))
+            , float(eval(config['rwh']['r3_max_filter_throughput']))
+            , float(eval(config['rwh']['r3_effective_collection_area']))
+            , float(eval(config['rwh']['r3_rain_buffer_volume']))
+            , False
+            )
     df, df_tank\
         = calc_rwh_system(df  # rwh_data
                          , float(eval(config['rwh']['avg_consumer_no']))
@@ -490,10 +518,13 @@ def main() \
                          , False  # show_data_overview
                          )
     print("Example RWH data")
-    print(df[np.logical_or(np.logical_or(df_storm_gr, df_storm_mr), df_tank)].tail(10).transpose())
+    print(df_storm_gr, df_storm_mr, df_storm_cp, df_tank)
+    #print(df[np.logical_or(np.logical_or(df_storm_gr, df_storm_mr, df_storm_cp), df_tank)].tail(10).transpose())
+    #print(df[np.logical_or.reduce([df_storm_gr, df_storm_mr, df_tank])].tail(10).transpose())
     print()
     del df_storm_gr
     del df_storm_mr
+    #del df_storm_cp
     del df_tank
 
     df_y, df_total_y = date_group_rwh_data(df, ['year'], False)
