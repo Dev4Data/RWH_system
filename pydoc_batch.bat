@@ -1,4 +1,4 @@
 @echo off
 
-cd C:\coding\projects\NLP
-pdoc yenikas_weather.scripts --html --output-dir yenikas_weather\_docs
+cd C:\coding\projects\yenikas_weather
+pdoc src --html --output-dir _docs

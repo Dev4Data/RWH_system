@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.draw_charts API documentation</title>
+<meta name="description" content="show and save diagrams to understand the weather data and performance of the RWH components
+author: Matthis (Dev4Data-github@online.ms)
+description:
+…">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.draw_charts</code></h1>
+</header>
+<section id="section-intro">
+<p>show and save diagrams to understand the weather data and performance of the RWH components
+author: Matthis (Dev4Data-github@online.ms)
+description:
+diverse methods to show diagrams with weather data
+and RWH performance data</p>
+<p>functions:
+load_csv - load the weatherdata from csv file and calculate required and some need additional data
+init_rwh_data - initialise empty fields for later filling with rwh data
+calc_rwh_collection - calculate the collected amount of water from one roof
+calc_rwh_system - calculate the performance of the RWH design according to the specified parameters
+group_rwh_data_ym - group the data by year-month and calculate some aggregates
+main - method process to order the calls of the methods and set parameters to create a RWH system</p>
+<pre><code>chart_wspd_wdir - show wind speed vs. wind direction
+chart_wspd_wdir_monthly - show wind speed vs. wind direction for each month separate
+chart_windrose - show the wind rose for all time
+chart_windrose_yearly - show the wind rose for each year separate
+chart_ym_heatmap - create a heatmap from two given fields from the DataFrame on the year month grouping
+chart_freq - show a histogram for a particular defined field
+chart_precip_sum_ym - show the precipitation total per year-month
+chart_precip_sum_yw - show the precipitation total per year-week
+chart_precip_sum_to_h_yearly - show the hours of precipitation per month for every year separate
+chart_precip_month - show the categorized precipitation data per month
+chart_df_totals - print the table with the totals
+</code></pre>
+<p>return:
+all charts are saved as *.png files and can be find in the diagrams folder</p>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="src.draw_charts.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<div class="desc"><p>Parameters</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.draw_charts.chart_df_totals"><code class="name flex">
+<span>def <span class="ident">chart_df_totals</span></span>(<span>df_tmp_grp: pandas.core.frame.DataFrame)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_df_totals(df_tmp_grp: pd.DataFrame):
+    &#34;&#34;&#34;plot table with totls of the DataFrame&#34;&#34;&#34;
+    f = plt.figure(figsize=(20, 12))
+    ax = f.add_subplot(111, frame_on=False)
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+    tab = pd.plotting.table(ax, df_tmp_grp, loc=&#39;upper right&#39;)
+    # tab.auto_set_font_size(False)
+    # tab.set_fontsize(8)
+    # tab.scale(1.2, 1.2)
+    plt.savefig(f&#34;{diagram_path}df_totals.png&#34;, transparent=True)
+    plt.close()</code></pre>
+</details>
+<div class="desc"><p>plot table with totls of the DataFrame</p></div>
+</dd>
+<dt id="src.draw_charts.chart_freq"><code class="name flex">
+<span>def <span class="ident">chart_freq</span></span>(<span>df_in: pandas.core.frame.DataFrame, filename, title, xlabel, ylabel, bins=50)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_freq(df_in: pd.DataFrame, filename, title, xlabel, ylabel, bins=50):
+    &#34;&#34;&#34;histogram of the ne field of the dataFrame &#34;&#34;&#34;
+    if df_in is None:
+        return
+    df_tmp = df_in.reset_index(drop=False)
+    f = plt.figure(figsize=(20, 12))
+    f = sns.displot(df_tmp)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.savefig(f&#34;{diagram_path}distplot_{filename}.png&#34;)
+    plt.close()</code></pre>
+</details>
+<div class="desc"><p>histogram of the ne field of the dataFrame</p></div>
+</dd>
+<dt id="src.draw_charts.chart_precip_month"><code class="name flex">
+<span>def <span class="ident">chart_precip_month</span></span>(<span>df_tmp: pandas.core.frame.DataFrame, filename)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_precip_month(df_tmp: pd.DataFrame, filename):
+    &#34;&#34;&#34;heatmap of the categorized precipitation per year-month&#34;&#34;&#34;
+#    df_tmp.reset_index(drop=False, inplace=True)
+    df_tmp = df_tmp[df_tmp[&#39;precip_grp&#39;] != &#39;00&#39;]
+    df_precip_month \
+        = df_tmp.pivot_table(index=&#39;precip_grp&#39;, columns=&#39;month&#39;, values=&#39;yyyy_mm&#39;, aggfunc=&#39;count&#39;)
+    df_precip_month.sort_index(level=0, ascending=False, inplace=True)
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(20, 12))
+    fig1.suptitle(&#39;rain fall per month&#39;)
+    sns.heatmap(df_precip_month, ax=ax1, cmap=&#34;YlGnBu&#34;, annot=True, linewidth=1, square=True, fmt=&#39;g&#39;)
+    # ax1.set_title(&#34;Continent correlation&#34;)
+    plt.xlabel(&#39;month&#39;)
+    plt.ylabel(&#39;rain fall in mm grouped&#39;)
+    fig1.savefig(f&#34;{diagram_path}heatmap_{filename}.png&#34;)
+    plt.close()</code></pre>
+</details>
+<div class="desc"><p>heatmap of the categorized precipitation per year-month</p></div>
+</dd>
+<dt id="src.draw_charts.chart_precip_sum_to_h_yearly"><code class="name flex">
+<span>def <span class="ident">chart_precip_sum_to_h_yearly</span></span>(<span>df_in: pandas.core.frame.DataFrame, df_tmp_grp: pandas.core.frame.DataFrame)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_precip_sum_to_h_yearly(df_in: pd.DataFrame, df_tmp_grp: pd.DataFrame):
+    &#34;&#34;&#34;pairplot of precip_sum, precip_h_sum and stored_grp_min separate for each year&#34;&#34;&#34;
+    df_tmp_grp.reset_index(inplace=True)
+    df_tmp = df_in.reset_index(drop=False)
+    years = df_tmp[&#39;year&#39;].unique()
+    for y in years:
+        df_grp_tmp = df_tmp_grp[df_tmp_grp[&#34;year&#34;] == y]
+        df_grp_tmp.set_index([&#39;year&#39;, &#39;month&#39;], inplace=True)
+        g1 = sns.pairplot(df_grp_tmp[[&#39;precip_sum&#39;, &#39;precip_h_sum&#39;, &#39;stored_grp_min&#39;]]
+                          , hue=&#34;stored_grp_min&#34;, diag_kind=&#39;kde&#39;, plot_kws={&#34;s&#34;: 8})
+        plt.suptitle(&#39;Year-Month precipation sum to hours&#39;)
+        year = str(y)
+        g1.savefig(f&#34;{diagram_path}yearly/pairplot_precip_sum_h{year}.png&#34;)
+        plt.close()</code></pre>
+</details>
+<div class="desc"><p>pairplot of precip_sum, precip_h_sum and stored_grp_min separate for each year</p></div>
+</dd>
+<dt id="src.draw_charts.chart_precip_sum_ym"><code class="name flex">
+<span>def <span class="ident">chart_precip_sum_ym</span></span>(<span>df_in: pandas.core.frame.DataFrame, file_name)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_precip_sum_ym(df_in: pd.DataFrame, file_name):
+    &#34;&#34;&#34;lineplot precip_sum per year-month&#34;&#34;&#34;
+    import datetime
+    if df_in is None:
+        return
+    # Create figure and plot space
+    df_tmp = df_in.reset_index(drop=False)
+    df_tmp = df_tmp[df_tmp[&#39;year&#39;] &gt;= datetime.datetime.today().year -7]
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(15, 8))
+    fig1.suptitle(&#39;Year-Month charts&#39;)
+    sns.set(style=&#34;darkgrid&#34;
+            , rc={&#34;lines.linewidth&#34;: 1, &#34;legend.fontsize&#34;: 8, &#34;legend.loc&#34;: &#39;upper center&#39;})
+    sns.lineplot(data=df_tmp, sort=False,
+                 x=&#39;month&#39;, y=&#34;precip_sum&#34;,
+                 hue=&#34;year&#34;,
+                 # size=&#34;precip_sum&#34;,
+                 legend=&#39;full&#39;, palette=&#39;Paired&#39;, markers=True,
+                 )
+    ax1.set(xticks=df_tmp.month.values)
+    ax1.set_xlabel(&#34;Year-Month&#34;)
+    ax1.set_ylabel(&#34;recipation in mm&#34;, labelpad=10)
+    ax1.set_title(&#34;Year-Month precipation sum&#34;)
+    fig1.savefig(f&#34;{diagram_path}lineplot{file_name}.png&#34;)
+    plt.close()</code></pre>
+</details>
+<div class="desc"><p>lineplot precip_sum per year-month</p></div>
+</dd>
+<dt id="src.draw_charts.chart_precip_sum_yw"><code class="name flex">
+<span>def <span class="ident">chart_precip_sum_yw</span></span>(<span>df_in: pandas.core.frame.DataFrame)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_precip_sum_yw(df_in: pd.DataFrame):
+    &#34;&#34;&#34;lineplot precip_sum per year-week&#34;&#34;&#34;
+    import datetime
+    if df_in is None:
+        return
+    # Create figure and plot space
+    df_tmp = df_in.reset_index(drop=False)
+#    df_tmp.reset_index(inplace=True)
+    df_tmp = df_tmp[df_tmp[&#39;year&#39;] &gt;= datetime.datetime.today().year -7].astype(str)
+    df_tmp_grp = precip_sum_yw(df_tmp)
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(15, 8))
+    fig1.suptitle(&#39;Year-Week charts&#39;)
+    sns.set(style=&#34;darkgrid&#34;
+            , rc={&#34;lines.linewidth&#34;: 1, &#34;legend.fontsize&#34;: 8, &#34;legend.loc&#34;: &#39;upper center&#39;})
+    sns.lineplot(data=df_tmp_grp, sort=True,
+                 x=&#39;week&#39;, y=&#34;precip_sum&#34;,
+                 hue=&#34;year&#34;,
+                 # size=&#34;precip_std&#34;, #style=&#34;precip_std&#34;,
+                 legend=&#39;full&#39;, palette=&#39;Paired&#39;, markers=True,
+                 )
+
+    ax1.set(xticks=df_tmp.week.values)
+    ax1.set_xlabel(&#34;Year-week&#34;)
+    ax1.set_ylabel(&#34;recipation in mm&#34;, labelpad=10)
+    ax1.set_title(&#34;Year-week precipation sum&#34;)
+    fig1.savefig(f&#34;{diagram_path}lineplot_yw_precip_sum.png&#34;)
+    plt.close()</code></pre>
+</details>
+<div class="desc"><p>lineplot precip_sum per year-week</p></div>
+</dd>
+<dt id="src.draw_charts.chart_windrose"><code class="name flex">
+<span>def <span class="ident">chart_windrose</span></span>(<span>df_in: pandas.core.frame.DataFrame)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_windrose(df_in: pd.DataFrame):
+    &#34;&#34;&#34;wind rose with wind speed and direction&#34;&#34;&#34;
+    from windrose import WindroseAxes
+
+    df_tmp = df_in.reset_index(drop=False)
+    df_wind = df_tmp[[&#39;wdir&#39;,&#39;wspd&#39;]]
+    fig3 = plt.figure(figsize=(7, 7), dpi=80, facecolor=&#39;w&#39;, edgecolor=&#39;w&#39;)
+    rect = [0.15, 0.15, 0.7, 0.7]
+    ax3 = WindroseAxes(fig3, rect)
+    fig3.add_axes(ax3)
+    ax3.bar(df_wind[&#34;wdir&#34;].astype(float), df_wind[&#34;wspd&#34;].astype(float), normed=True, opening=1)
+    ax3.set_title(&#39;wind direction with speed&#39;)
+    plt.savefig(f&#34;{diagram_path}windrose_wdir.png&#34;)
+    plt.close()</code></pre>
+</details>
+<div class="desc"><p>wind rose with wind speed and direction</p></div>
+</dd>
+<dt id="src.draw_charts.chart_windrose_yearly"><code class="name flex">
+<span>def <span class="ident">chart_windrose_yearly</span></span>(<span>df_in: pandas.core.frame.DataFrame)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_windrose_yearly(df_in: pd.DataFrame):
+    &#34;&#34;&#34;wind rose with wind speed and direction separate for each year&#34;&#34;&#34;
+    from windrose import WindroseAxes
+
+    # Create figure and plot space
+#    df_tmp.reset_index(inplace=True)
+    df_tmp = df_in.reset_index(drop=False)
+    years = df_tmp[&#39;year&#39;].unique()
+    for y in years:
+        df_wind = df_tmp[df_tmp[&#34;year&#34;] == y]
+        df_wind = df_wind[[&#39;wdir&#39;, &#39;wspd&#39;]]
+        fig3 = plt.figure(figsize=(7, 7), dpi=80, facecolor=&#39;w&#39;, edgecolor=&#39;w&#39;)
+        rect = [0.15, 0.15, 0.7, 0.7]
+        ax3 = WindroseAxes(fig3, rect)
+        fig3.add_axes(ax3)
+        ax3.bar(df_wind[&#34;wdir&#34;], df_wind[&#34;wspd&#34;], normed=True, opening=1)
+        year = str(y)
+        ax3.set_title(f&#34;wind direction with speed for year {year}&#34;)
+        plt.savefig(f&#34;{diagram_path}yearly/windrose_wdir{year}.png&#34;)
+        plt.close()</code></pre>
+</details>
+<div class="desc"><p>wind rose with wind speed and direction separate for each year</p></div>
+</dd>
+<dt id="src.draw_charts.chart_wspd_wdir"><code class="name flex">
+<span>def <span class="ident">chart_wspd_wdir</span></span>(<span>df_in: pandas.core.frame.DataFrame, filename)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_wspd_wdir(df_in: pd.DataFrame, filename):
+    &#34;&#34;&#34;wind speed vs wind direction chart total&#34;&#34;&#34;
+    df_tmp = df_in.reset_index(drop=False)
+    df_wdir_wspd \
+        = df_tmp.pivot_table(index=&#39;wspd_5&#39;, columns=&#39;wdir_10&#39;, values=&#39;yyyy_mm&#39;, aggfunc=&#39;count&#39;)
+    df_wdir_wspd.sort_index(level=0, ascending=False, inplace=True)
+
+    fig1, (ax1) = plt.subplots(1, 1, figsize=(20, 12))
+    fig1.suptitle(&#39;Wind data wind direction to wind speed&#39;)
+
+    sns.heatmap(df_wdir_wspd, ax=ax1, cmap=&#34;YlGnBu&#34;, annot=True, linewidth=1, square=True, fmt=&#39;g&#39;)
+    # ax1.set_title(&#34;Continent correlation&#34;)
+    plt.xlabel(&#39;wind direction °&#39;)
+    plt.ylabel(&#39;wind speed kph&#39;)
+    fig1.savefig(f&#34;{diagram_path}heatmap_{filename}.png&#34;)
+    plt.close()</code></pre>
+</details>
+<div class="desc"><p>wind speed vs wind direction chart total</p></div>
+</dd>
+<dt id="src.draw_charts.chart_wspd_wdir_monthly"><code class="name flex">
+<span>def <span class="ident">chart_wspd_wdir_monthly</span></span>(<span>df_in: pandas.core.frame.DataFrame, filename)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_wspd_wdir_monthly(df_in: pd.DataFrame, filename):
+    &#34;&#34;&#34;wind speed vs wind direction chart per month&#34;&#34;&#34;
+    df_tmp = df_in.reset_index(drop=False)
+    for m in range(1, 12):
+        df_tmp_month = df_tmp[df_tmp[&#34;month&#34;] == m]
+        df_wdir_wspd \
+            = df_tmp_month.pivot_table(index=&#39;wspd_5&#39;, columns=&#39;wdir_10&#39;, values=&#39;yyyy_mm&#39;, aggfunc=&#39;count&#39;)
+        df_wdir_wspd.sort_index(level=0, ascending=False, inplace=True)
+
+        fig1, (ax1) = plt.subplots(1, 1, figsize=(20, 12))
+        fig1.suptitle(&#39;Wind data wind direction to wind speed for month &#39;+str(m))
+        sns.heatmap(df_wdir_wspd, ax=ax1, cmap=&#34;YlGnBu&#34;, annot=True, linewidth=1, square=True, fmt=&#39;g&#39;)
+        # ax1.set_title(&#34;Continent correlation&#34;)
+        plt.xlabel(&#39;wind direction °&#39;)
+        plt.ylabel(&#39;wind speed kph&#39;)
+        fig1.savefig(f&#34;{diagram_path}monthly/heatmap_{filename}_&#34; +str(m)+ &#34;.png&#34;)
+        plt.close()
+        del df_tmp_month
+        del df_wdir_wspd</code></pre>
+</details>
+<div class="desc"><p>wind speed vs wind direction chart per month</p></div>
+</dd>
+<dt id="src.draw_charts.chart_ym_heatmap"><code class="name flex">
+<span>def <span class="ident">chart_ym_heatmap</span></span>(<span>df_in: pandas.core.frame.DataFrame, fields, filename, title, xlabel, ylabel, cmap)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chart_ym_heatmap(df_in: pd.DataFrame, fields, filename, title, xlabel, ylabel, cmap):
+    &#34;&#34;&#34;heatmap chart that shows the 3 entered fields
+            please enter a dataFrame with exactly 3 fields&#34;&#34;&#34;
+    if df_in is None:
+        return
+    df_tmp = df_in.reset_index(drop=False)
+    # df_tmp.reset_index(drop=False, inplace=True)
+    df_pivot = df_tmp.pivot(index=fields[0], columns=fields[1], values=fields[2])
+    fig2, (ax2) = plt.subplots(1, 1, figsize=(20, 12))
+    fig2.suptitle(title)
+    sns.heatmap(df_pivot, ax=ax2, cmap=cmap, annot=True, fmt=&#39;g&#39;)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    fig2.savefig(f&#34;{diagram_path}heatmap_{filename}.png&#34;)
+    plt.close()
+    del df_pivot</code></pre>
+</details>
+<div class="desc"><p>heatmap chart that shows the 3 entered fields
+please enter a dataFrame with exactly 3 fields</p></div>
+</dd>
+<dt id="src.draw_charts.precip_sum_yw"><code class="name flex">
+<span>def <span class="ident">precip_sum_yw</span></span>(<span>df_in: pandas.core.frame.DataFrame)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def precip_sum_yw(df_in: pd.DataFrame):
+    df_tmp = df_in.reset_index(drop=False)
+    df_tmp = df_tmp[[&#39;year&#39;, &#39;week&#39;, &#39;precip&#39;]]
+    df_tmp[&#39;week_int&#39;] = df_tmp[&#39;week&#39;].astype(np.int64)
+    df_tmp[&#39;precip&#39;] = df_tmp[&#39;precip&#39;].astype(float)
+    df_tmp.sort_values([&#39;year&#39;, &#39;week_int&#39;], inplace=True)
+    df_tmp_grp = df_tmp.groupby([&#39;year&#39;, &#39;week&#39;], as_index=True, sort=False)[&#39;precip&#39;] \
+        .agg([&#34;sum&#34;, &#34;std&#34;])\
+        .rename(columns={&#39;sum&#39;: &#39;precip_sum&#39;, &#39;std&#39;: &#39;precip_std&#39;})
+    return df_tmp_grp</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src" href="index.html">src</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="src.draw_charts.config" href="#src.draw_charts.config">config</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.draw_charts.chart_df_totals" href="#src.draw_charts.chart_df_totals">chart_df_totals</a></code></li>
+<li><code><a title="src.draw_charts.chart_freq" href="#src.draw_charts.chart_freq">chart_freq</a></code></li>
+<li><code><a title="src.draw_charts.chart_precip_month" href="#src.draw_charts.chart_precip_month">chart_precip_month</a></code></li>
+<li><code><a title="src.draw_charts.chart_precip_sum_to_h_yearly" href="#src.draw_charts.chart_precip_sum_to_h_yearly">chart_precip_sum_to_h_yearly</a></code></li>
+<li><code><a title="src.draw_charts.chart_precip_sum_ym" href="#src.draw_charts.chart_precip_sum_ym">chart_precip_sum_ym</a></code></li>
+<li><code><a title="src.draw_charts.chart_precip_sum_yw" href="#src.draw_charts.chart_precip_sum_yw">chart_precip_sum_yw</a></code></li>
+<li><code><a title="src.draw_charts.chart_windrose" href="#src.draw_charts.chart_windrose">chart_windrose</a></code></li>
+<li><code><a title="src.draw_charts.chart_windrose_yearly" href="#src.draw_charts.chart_windrose_yearly">chart_windrose_yearly</a></code></li>
+<li><code><a title="src.draw_charts.chart_wspd_wdir" href="#src.draw_charts.chart_wspd_wdir">chart_wspd_wdir</a></code></li>
+<li><code><a title="src.draw_charts.chart_wspd_wdir_monthly" href="#src.draw_charts.chart_wspd_wdir_monthly">chart_wspd_wdir_monthly</a></code></li>
+<li><code><a title="src.draw_charts.chart_ym_heatmap" href="#src.draw_charts.chart_ym_heatmap">chart_ym_heatmap</a></code></li>
+<li><code><a title="src.draw_charts.precip_sum_yw" href="#src.draw_charts.precip_sum_yw">precip_sum_yw</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

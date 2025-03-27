@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>src.get_weather_data API documentation</title>
+<meta name="description" content="collect weather data from visualcrossing API
+author: Matthis (Dev4Data-github@online.ms)
+description:
+The weather data is collected and saved in …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>src.get_weather_data</code></h1>
+</header>
+<section id="section-intro">
+<p>collect weather data from visualcrossing API
+author: Matthis (Dev4Data-github@online.ms)
+description:
+The weather data is collected and saved in the weather_file
+Parameters are taken from the *.ini files (dnt forget to setup the key.ini with the visualcrossing API key)</p>
+<p>functions:
+get_latlon_weather_json - method to access the visualcrossing API
+get_new_weather_data - method to do one API call with the desired data and limited API requirements
+get_weather_data_run - main method to call the get_new_weather_data several times to use daily limits
+return:
+save the collected data in the
+weather_file</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.get_weather_data.get_latlon_weather_json"><code class="name flex">
+<span>def <span class="ident">get_latlon_weather_json</span></span>(<span>latlon_in, date_min_in, date_max_in, use_key_num=0)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_latlon_weather_json(
+    latlon_in,
+    date_min_in,
+    date_max_in,
+    use_key_num=0
+):
+    &#34;&#34;&#34;method to get historical weather data for one lat+lon position between start and end-date
+            as daily aggregate in metric unit.
+            Data is return as aggregate from the closest stations. If the point has no direct station.
+
+        parameters:
+            latlon_in position array with latitude and longitude (like [12.34567,12.34567])
+            date_min_in: data of the first entry
+        return:
+            json object with data and column description
+    &#34;&#34;&#34;
+    API_key = keys[use_key_num]
+    hist_weather_url = config[&#39;visualcrossing&#39;][&#39;hist_weather_url&#39;]
+    query_location = &#39;&amp;location={},{}&#39;.format(latlon_in[0], latlon_in[1])
+    query_date = &#39;&amp;startDateTime=&#39; + date_min_in + &#39;T00:00:00&amp;endDateTime=&#39; + date_max_in + &#39;T00:00:00&#39;
+    query_type_params = &#39;&amp;aggregateHours=24&amp;unitGroup=metric&amp;outputDateTimeFormat=yyyy-MM-dd&#39;\
+                        + &#39;&amp;dayStartTime=0:0:00&amp;dayEndTime=0:0:00&#39; + query_date\
+                        + &#39;&amp;unitGroup=metric&amp;locationMode=single&amp;contentType=json&amp;shortColumnNames=true&#39;
+    url = hist_weather_url + query_type_params + query_location + API_key
+    print(&#39; - Running query URL: &#39;, url)
+    # os.system(&#34;pause&#34;)
+    try:
+        response = requests.get(url)
+        # response = data_scraper(&#39;GET&#39;, url)
+    except requests.exceptions.RequestException as e:
+        print(&#39;RequestException: &#39;, e)
+        return
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        print(&#39;HTTPError: &#39;, e)
+        return
+
+    json_obj = response.json()
+    return json_obj</code></pre>
+</details>
+<div class="desc"><p>method to get historical weather data for one lat+lon position between start and end-date
+as daily aggregate in metric unit.
+Data is return as aggregate from the closest stations. If the point has no direct station.</p>
+<p>parameters:
+latlon_in position array with latitude and longitude (like [12.34567,12.34567])
+date_min_in: data of the first entry
+return:
+json object with data and column description</p></div>
+</dd>
+<dt id="src.get_weather_data.get_new_weather_data"><code class="name flex">
+<span>def <span class="ident">get_new_weather_data</span></span>(<span>num_rows=99, use_key_num=0, collect_data_before_now='y')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_new_weather_data(
+    num_rows=99,
+    use_key_num=0,
+    collect_data_before_now=&#34;y&#34;
+):
+    &#34;&#34;&#34;method that find the from-date and to-date to limit the weather data API call,
+        it just load data where the weather data is not collected yet
+        it calls the get_latlon_weather_json to ask for new weather data
+
+        parameter:
+            num_rows - get this number of rows from API (from-to dates are choosen according it)
+            use_key_num - which key should be used (depending on the specified keys in the ini file)
+            collect_data_before_now
+                        - y=&gt;collect data older than all already existing data
+                        - other-parameters=&gt;collect data newer than all already existing data
+        return:
+                 remaining_cost - integer/# of remaining API calls
+                 filled_lines - integer/# of data that was collected
+    &#34;&#34;&#34;
+    try:
+        df = pd.read_csv(weather_file)
+    except FileNotFoundError:
+        print(&#34;File not found. &#34;+weather_file)
+        return
+    except pd.errors.EmptyDataError:
+        print(&#34;No data in &#34;+weather_file)
+        return
+    except pd.errors.ParserError:
+        print(&#34;Parse error for file &#34;+weather_file)
+        return
+
+    df[&#39;date&#39;] = df[&#39;date&#39;].astype({&#39;date&#39;: &#39;datetime64[ns]&#39;})
+    df.reset_index(inplace=True)
+    df_tmp = df.groupby([&#39;location&#39;], as_index=False, sort=False) \
+                        .agg({&#39;date&#39;: [&#39;min&#39;, &#39;max&#39;]})
+    df_tmp.columns = [&#34;_&#34;.join(x) for x in df_tmp.columns.ravel()]
+    print(df_tmp)
+    filled_lines = 0
+    remaining_cost = remain_rows
+    for loc in df_tmp.index:
+        # get smallest and highest date for location (max x rows)
+        location = df_tmp[&#34;location_&#34;][loc]
+        if collect_data_before_now == &#34;y&#34;:
+            df_date_max_tmp = df_tmp[&#34;date_min&#34;][loc] - datetime.timedelta(1)
+            df_date_max = df_date_max_tmp.strftime(&#34;%Y-%m-%d&#34;)
+            df_date_min_tmp = df_tmp[&#34;date_min&#34;][loc]\
+                - datetime.timedelta(num_rows)
+            df_date_min = df_date_min_tmp.strftime(&#34;%Y-%m-%d&#34;)
+        else:
+            df_date_min_tmp = df_tmp[&#34;date_max&#34;][loc] + datetime.timedelta(1)
+            df_date_min = df_date_min_tmp.strftime(&#34;%Y-%m-%d&#34;)
+            df_date_max_tmp = \
+                np.minimum((datetime.datetime.today() - datetime.timedelta(1))
+                             , df_tmp[&#34;date_max&#34;][loc]
+                                + datetime.timedelta(int(num_rows)))
+            df_date_max = df_date_max_tmp.strftime(&#34;%Y-%m-%d&#34;)
+
+        # latitude+longitude of location
+        latlng = [config[&#39;location&#39;][&#39;latitude&#39;], config[&#39;location&#39;][&#39;longitude&#39;]]
+        # get the weather data as csv
+        print(&#34;geo={}; date min={} and max={}&#34;.format(latlng, df_date_min, df_date_max))
+        json_data = get_latlon_weather_json(latlng, df_date_min, df_date_max, use_key_num)
+#        print(json_data[&#39;location&#39;])
+
+        if not json_data:
+            raise ValueError(&#34;no data returned from weather.visualcrossing.com API&#34;)
+        if &#34;messages&#34; in json_data:
+            msg = json_data[&#34;messages&#34;]
+        elif &#34;message&#34; in json_data:
+            msg = json_data[&#34;message&#34;]
+        else:
+            msg = &#34;nan&#34;
+        info = json_data[&#39;location&#39;][&#39;values&#39;][0][&#39;info&#39;]
+        if info == &#34;No data available&#34;:
+            print(&#34;msg: {}&#34;.format(info))
+            return json_data[&#39;remainingCost&#39;], 0
+
+        if msg is None or msg == &#34;nan&#34;:
+            if &#34;remainingCost&#34; in json_data:
+                remaining_cost = int(json_data[&#39;remainingCost&#39;])
+                print(&#34;remaining_cost: {}, at key: {}&#34;.format(remaining_cost, use_key_num))
+                if remaining_cost &gt;= 0:
+                    if &#34;address&#34; in json_data:
+                        locations = json_data[&#39;address&#39;]
+                    elif &#34;addresses&#34; in json_data:
+                        locations = json_data[&#39;addresses&#39;]
+                    else:
+                        locations = json_data[&#39;location&#39;]
+
+                    df_json = pd.json_normalize(locations, [&#39;values&#39;], meta=[&#39;id&#39;])
+                    df_json.rename(columns={&#34;id&#34;: &#34;address&#34;}, inplace=True)
+                    df_json[&#39;date&#39;] = df_json[&#39;datetimeStr&#39;]
+                    df_json[&#39;date&#39;] = df_json[&#39;date&#39;].astype({&#39;date&#39;: &#39;datetime64[ns]&#39;})
+                    df_json[&#39;location&#39;] = location
+                    df_json.to_csv(weather_file, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, mode=&#39;a+&#39;, header=False, index=False,
+                                   quotechar=&#39;&#34;&#39;, quoting=csv.QUOTE_NONNUMERIC)
+                    #print(df_json.info())
+                    #print(df_json.head())
+                    df_snapshot = df_json[[&#39;location&#39;,&#39;date&#39;,&#39;address&#39;,&#39;wdir&#39;,&#39;maxt&#39;,&#39;conditions&#39;]].head(1)
+                    # df_snapshot.append(df[[&#39;location&#39;,&#39;date&#39;,&#39;address&#39;,&#39;wdir&#39;,&#39;maxt&#39;,&#39;conditions&#39;]].tail(1))
+                    pd.concat([df_snapshot, df[[&#39;location&#39;,&#39;date&#39;,&#39;address&#39;,&#39;wdir&#39;,&#39;maxt&#39;,&#39;conditions&#39;]]]).tail(1)
+                    print(&#34;weatherdata # added {}&#34;.format(df.shape[0]))
+                #    print(df_snapshot)
+                    filled_lines = df_json.shape[0]
+        else:
+            print(&#34;msg: {}&#34;.format(msg))
+            return json_data[&#39;remainingCost&#39;], 0
+    return remaining_cost, filled_lines</code></pre>
+</details>
+<div class="desc"><p>method that find the from-date and to-date to limit the weather data API call,
+it just load data where the weather data is not collected yet
+it calls the get_latlon_weather_json to ask for new weather data</p>
+<p>parameter:
+num_rows - get this number of rows from API (from-to dates are choosen according it)
+use_key_num - which key should be used (depending on the specified keys in the ini file)
+collect_data_before_now
+- y=&gt;collect data older than all already existing data
+- other-parameters=&gt;collect data newer than all already existing data
+return:
+remaining_cost - integer/# of remaining API calls
+filled_lines - integer/# of data that was collected</p></div>
+</dd>
+<dt id="src.get_weather_data.get_weather_data_run"><code class="name flex">
+<span>def <span class="ident">get_weather_data_run</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_weather_data_run():
+    &#34;&#34;&#34;method as a skull to loop over the API keys defined
+            and  loop also x times to collect data according to the daily limit and the limit per API call
+
+        parameter:
+        return:
+                 just display some summary data
+    &#34;&#34;&#34;
+    # loop both API_keys
+    print(&#34;start gather weatherdata&#34;)
+    for key in range(len(keys)):
+        remain_rows_tmp = remain_rows
+        sum_filled = 0
+        # loop x times each time with 50-100 rows to full fill the limits of API calls
+        for i in range(int(config[&#39;visualcrossing&#39;][&#39;loops&#39;])):
+            get_rows = np.minimum(int(config[&#39;visualcrossing&#39;][&#39;rows_per_run&#39;])
+                                  , remain_rows_tmp)
+            remain_rows_tmp, filled \
+                = get_new_weather_data( num_rows=get_rows
+                                       , use_key_num=key
+                                       , collect_data_before_now=&#34;n&#34;)
+            sum_filled += filled
+            if filled == 0:
+                print(&#34;{} new # of weatherdata with key={} remain_rows={} &#34;\
+                      .format(sum_filled, key, remain_rows_tmp))
+                break</code></pre>
+</details>
+<div class="desc"><p>method as a skull to loop over the API keys defined
+and
+loop also x times to collect data according to the daily limit and the limit per API call</p>
+<p>parameter:
+return:
+just display some summary data</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="src" href="index.html">src</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.get_weather_data.get_latlon_weather_json" href="#src.get_weather_data.get_latlon_weather_json">get_latlon_weather_json</a></code></li>
+<li><code><a title="src.get_weather_data.get_new_weather_data" href="#src.get_weather_data.get_new_weather_data">get_new_weather_data</a></code></li>
+<li><code><a title="src.get_weather_data.get_weather_data_run" href="#src.get_weather_data.get_weather_data_run">get_weather_data_run</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>
