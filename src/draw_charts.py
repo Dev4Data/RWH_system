@@ -192,7 +192,7 @@ def precip_sum_yw(df_in: pd.DataFrame):
     df_tmp['precip'] = df_tmp['precip'].astype(float)
     df_tmp.sort_values(['year', 'week_int'], inplace=True)
     df_tmp_grp = df_tmp.groupby(['year', 'week'], as_index=True, sort=False)['precip'] \
-        .agg([np.sum, np.std])\
+        .agg(["sum", "std"])\
         .rename(columns={'sum': 'precip_sum', 'std': 'precip_std'})
     return df_tmp_grp
 

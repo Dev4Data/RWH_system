@@ -8,6 +8,7 @@ functions:
 import pandas as pd
 import configparser
 from pathlib import Path
+import os
 
 
 def get_project_root():
@@ -22,10 +23,11 @@ def get_config():
         return:
             ConfigParser object
     """
-    PROJECT_ROOT = get_project_root()
+    PROJECT_ROOT: str = get_project_root()
     config = configparser.ConfigParser()
-    config_file = "{}\settings\settings.ini".format(PROJECT_ROOT)
-    key_file = "{}\settings\key.ini".format(PROJECT_ROOT)
+    SETTINGS_FOLDER: str = f'{PROJECT_ROOT}{os.sep}settings'
+    config_file: str = f'{SETTINGS_FOLDER}{os.sep}settings.ini'
+    key_file: str = f'{SETTINGS_FOLDER}{os.sep}key.ini'
     config.read([config_file, key_file])
     return config
 
